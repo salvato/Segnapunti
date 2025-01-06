@@ -1,22 +1,21 @@
 <RCC>
     <qresource prefix="/">
-        <file>resources/Logo_SSD_UniMe.png</file>
-        <file>resources/Logo_UniMe.png</file>
-        <file>resources/buttonIcons/Camera.png</file>
-        <file>resources/buttonIcons/ExchangeVolleyField.png</file>
-        <file>resources/buttonIcons/GeneralSetup.png</file>
-        <file>resources/buttonIcons/Minus.png</file>
-        <file>resources/buttonIcons/New-Game-Volley.png</file>
-        <file>resources/buttonIcons/New-Set-Volley.png</file>
-        <file>resources/buttonIcons/PlaySlides.png</file>
-        <file>resources/buttonIcons/PlaySpots.png</file>
-        <file>resources/buttonIcons/Plus.png</file>
-        <file>resources/buttonIcons/sign_stop.png</file>
-        <file>resources/buttonIcons/video-display.png</file>
-        <file>resources/buttonIcons/PanelSetup.png</file>
-        <file>resources/ball0.png</file>
-        <file>resources/ball1.png</file>
-        <file>resources/myLogo.ico</file>
-        <file>resources/buttonIcons/Off.png</file>
+        <file>myLogo.ico</file>
+        <file>Logo_SSD_UniMe.png</file>
+        <file>Logo_UniMe.png</file>
+        <file>ButtonIcons/ExchangeVolleyField.png</file>
+        <file>ButtonIcons/GeneralSetup.png</file>
+        <file>ButtonIcons/Minus.png</file>
+        <file>ButtonIcons/New-Game-Volley.png</file>
+        <file>ButtonIcons/New-Set-Volley.png</file>
+        <file>ButtonIcons/PlaySlides.png</file>
+        <file>ButtonIcons/PlaySpots.png</file>
+        <file>ButtonIcons/Plus.png</file>
+        <file>ButtonIcons/sign_stop.png</file>
+        <file>ButtonIcons/video-display.png</file>
+        <file>ButtonIcons/PanelSetup.png</file>
+        <file>Ball0.png</file>
+        <file>Ball1.png</file>
+        <file>ButtonIcons/Off.png</file>
     </qresource>
 </RCC>

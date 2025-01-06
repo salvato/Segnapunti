@@ -26,26 +26,26 @@ CONFIG += c++17
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    btclient.cpp \
-    button.cpp \
-    edit.cpp \
+    ../CommonFiles/btclient.cpp \
+    ../CommonFiles/button.cpp \
+    ../CommonFiles/edit.cpp \
+    ../CommonFiles/btscorecontroller.cpp \
+    ../CommonFiles/utility.cpp \
     generalsetuparguments.cpp \
     generalsetupdialog.cpp \
     main.cpp \
-    btscorecontroller.cpp \
-    utility.cpp \
     volleyapplication.cpp \
     volleycontroller.cpp
 
 HEADERS += \
-    btclient.h \
-    btscorecontroller.h \
-    button.h \
-    edit.h \
+    ../CommonFiles/btclient.h \
+    ../CommonFiles/btscorecontroller.h \
+    ../CommonFiles/button.h \
+    ../CommonFiles/edit.h \
+    ../CommonFiles/panelorientation.h \
+    ../CommonFiles/utility.h \
     generalsetuparguments.h \
     generalsetupdialog.h \
-    panelorientation.h \
-    utility.h \
     volleyapplication.h \
     volleycontroller.h
 
@@ -70,39 +70,22 @@ DISTFILES += \
     android/res/drawable-xxxhdpi/icon.png \
     android/res/values/libs.xml \
     android/res/xml/qtprovider_paths.xml \
-    resources/Logo_SSD_UniMe.png \
-    resources/Logo_UniMe.png \
-    resources/ball0.png \
-    resources/ball1.png \
-    resources/buttonIcons/Camera.png \
-    resources/buttonIcons/ExchangeVolleyField.png \
-    resources/buttonIcons/GeneralSetup.png \
-    resources/buttonIcons/Minus.png \
-    resources/buttonIcons/New-Game-Volley.png \
-    resources/buttonIcons/New-Set-Volley.png \
-    resources/buttonIcons/PanelSetup.png \
-    resources/buttonIcons/PlaySlides.png \
-    resources/buttonIcons/PlaySpots.png \
-    resources/buttonIcons/Plus.png \
-    resources/buttonIcons/image-missing.png \
-    resources/buttonIcons/scad Models/Arrow.scad \
-    resources/buttonIcons/scad Models/BasketField.scad \
-    resources/buttonIcons/scad Models/ExchangeBasketField.scad \
-    resources/buttonIcons/scadFiles/ExchangeVolleyField.scad \
-    resources/buttonIcons/scadFiles/GeneralSetup.scad \
-    resources/buttonIcons/scadFiles/NewGameVolley.scad \
-    resources/buttonIcons/scadFiles/NewSetVolley.scad \
-    resources/buttonIcons/scadFiles/PanelSetup.scad \
-    resources/buttonIcons/scadFiles/Setup.scad \
-    resources/buttonIcons/scadFiles/Slides.png \
-    resources/buttonIcons/scadFiles/Slides.scad \
-    resources/buttonIcons/scadFiles/Spots.scad \
-    resources/buttonIcons/scadFiles/VolleyField.scad \
-    resources/buttonIcons/scadFiles/VolleyPlayer.scad \
-    resources/buttonIcons/sign_stop.png \
-    resources/buttonIcons/video-display.png \
-    resources/myLogo.ico \
-    resources/myLogo.png
+    ButtonIcons/ExchangeVolleyField.png \
+    ButtonIcons/GeneralSetup.png \
+    ButtonIcons/Minus.png \
+    ButtonIcons/New-Game-Volley.png \
+    ButtonIcons/New-Set-Volley.png \
+    ButtonIcons/PanelSetup.png \
+    ButtonIcons/PlaySlides.png \
+    ButtonIcons/PlaySpots.png \
+    ButtonIcons/Plus.png \
+    ButtonIcons/sign_stop.png \
+    Logo_SSD_UniMe.png \
+    Logo_UniMe.png \
+    ball0.png \
+    ball1.png \
+    myLogo.ico \
+    myLogo.png
 
 RESOURCES += \
     Resources.qrc

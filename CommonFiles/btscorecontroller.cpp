@@ -8,7 +8,7 @@
 
 
 #include "btscorecontroller.h"
-#include "utility.h"
+#include "../CommonFiles/utility.h"
 #include "btclient.h"
 
 #if QT_CONFIG(permissions)

@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QComboBox>
 
 #include "generalsetuparguments.h"
-#include "panelorientation.h"
+#include "../CommonFiles/panelorientation.h"
 
 
 QT_FORWARD_DECLARE_CLASS(QDialogButtonBox)

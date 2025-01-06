@@ -19,8 +19,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "btscorecontroller.h"
-#include "panelorientation.h"
+#include "../CommonFiles/btscorecontroller.h"
+#include "../CommonFiles/panelorientation.h"
 
 #include <QTimer>
 

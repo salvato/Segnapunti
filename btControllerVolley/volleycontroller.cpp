@@ -29,9 +29,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "volleycontroller.h"
 #include "generalsetupdialog.h"
-#include "edit.h"
-#include "button.h"
-#include "utility.h"
+#include "../CommonFiles/edit.h"
+#include "../CommonFiles/button.h"
+#include "../CommonFiles/utility.h"
 
 #ifdef Q_OS_ANDROID
     #include <QCoreApplication>

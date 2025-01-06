@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *
 */
 #include "generalsetupdialog.h"
-#include "utility.h"
+#include "../CommonFiles/utility.h"
 
 #include <QTabWidget>
 #include <QVBoxLayout>

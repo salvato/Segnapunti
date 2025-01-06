@@ -44,3 +44,35 @@ logMessage(QFile *logFile, QString sFunctionName, QString sMessage) {
         qDebug() << sDebugMessage;
 }
 
+
+/*!
+ * \brief XML_Parse Very simple XML Parser
+ * \param input_string: the string to parse
+ * \param token: the token to look for
+ * \return XML_Parse("<score>1</score>","score") will return QString("1") or QString() on error
+ */
+QString
+XML_Parse(QString input_string, QString token) {
+    QString start_token, end_token, result = QString("NoData");
+    start_token = "<" + token + ">";
+    end_token = "</" + token + ">";
+
+    int start_pos=-1, end_pos=-1, len=0;
+
+    start_pos = input_string.indexOf(start_token);
+    end_pos   = input_string.indexOf(end_token);
+
+    if(start_pos < 0 || end_pos < 0) {
+        result = QString("NoData");
+    }
+    else {
+        start_pos += start_token.length();
+        len = end_pos - start_pos;
+        if(len>0)
+            result = input_string.mid(start_pos, len);
+        else
+            result = "";
+    }
+
+    return result;
+}
