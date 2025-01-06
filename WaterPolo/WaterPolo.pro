@@ -104,6 +104,33 @@ DISTFILES += \
     ../CommonFiles/Shaders/fWaterDrop.glsl \
     ../CommonFiles/Shaders/fWind.glsl \
     ../CommonFiles/Shaders/vShader.glsl \
+    ../CommonFiles/ShadersRPi4/fAngular.glsl \
+    ../CommonFiles/ShadersRPi4/fBookFlip.glsl \
+    ../CommonFiles/ShadersRPi4/fBounce.glsl \
+    ../CommonFiles/ShadersRPi4/fCircleopen.glsl \
+    ../CommonFiles/ShadersRPi4/fCrosshatch.glsl \
+    ../CommonFiles/ShadersRPi4/fCrosswarp.glsl \
+    ../CommonFiles/ShadersRPi4/fDisplacement.glsl \
+    ../CommonFiles/ShadersRPi4/fDoomScreen.glsl \
+    ../CommonFiles/ShadersRPi4/fDreamy.glsl \
+    ../CommonFiles/ShadersRPi4/fFade.glsl \
+    ../CommonFiles/ShadersRPi4/fFilmBurn.glsl \
+    ../CommonFiles/ShadersRPi4/fFlyEye.glsl \
+    ../CommonFiles/ShadersRPi4/fInvertedPageCurl.glsl \
+    ../CommonFiles/ShadersRPi4/fMorph.glsl \
+    ../CommonFiles/ShadersRPi4/fMultiply_blend.glsl \
+    ../CommonFiles/ShadersRPi4/fPerlin.glsl \
+    ../CommonFiles/ShadersRPi4/fPinwheel.glsl \
+    ../CommonFiles/ShadersRPi4/fPixelize.glsl \
+    ../CommonFiles/ShadersRPi4/fPolkaDotsCurtain.glsl \
+    ../CommonFiles/ShadersRPi4/fPowerKaleido.glsl \
+    ../CommonFiles/ShadersRPi4/fRadial.glsl \
+    ../CommonFiles/ShadersRPi4/fRipple.glsl \
+    ../CommonFiles/ShadersRPi4/fSwap.glsl \
+    ../CommonFiles/ShadersRPi4/fSwirl.glsl \
+    ../CommonFiles/ShadersRPi4/fWaterDrop.glsl \
+    ../CommonFiles/ShadersRPi4/fWind.glsl \
+    ../CommonFiles/ShadersRPi4/vShader.glsl \
     .gitignore \
     ButtonIcons/ExchangeVolleyField.png \
     ButtonIcons/Go.png \
