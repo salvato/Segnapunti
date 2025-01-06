@@ -1,3 +1,21 @@
+/*
+ *
+Copyright (C) 2023  Gabriele Salvato
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*
+*/
 #include <QApplication>
 #include <QHBoxLayout>
 #include <QPushButton>
@@ -11,7 +29,7 @@
 #include "../CommonFiles/utility.h"
 #include "btclient.h"
 
-#if QT_CONFIG(permissions)
+#if QT_FEATURE_permissions
 #include <QtCore/qcoreapplication.h>
 #include <QtCore/qpermissions.h>
 #include <QtWidgets/qmessagebox.h>
@@ -79,28 +97,28 @@ QHBoxLayout*
 BtScoreController::CreateSpotButtons() {
     auto* spotButtonLayout = new QHBoxLayout();
 
-    QPixmap pixmap(":/resources/buttonIcons/PlaySpots.png");
+    QPixmap pixmap(":/ButtonIcons/PlaySpots.png");
     QIcon ButtonIcon(pixmap);
     pSpotButton = new QPushButton(ButtonIcon, "");
     pSpotButton->setIconSize(pixmap.rect().size());
     pSpotButton->setFlat(true);
     pSpotButton->setToolTip("Start/Stop Spot Loop");
 
-    pixmap.load(":/resources/buttonIcons/PlaySlides.png");
+    pixmap.load(":/ButtonIcons/PlaySlides.png");
     ButtonIcon.addPixmap(pixmap);
     pSlideShowButton = new QPushButton(ButtonIcon, "");
     pSlideShowButton->setIconSize(pixmap.rect().size());
     pSlideShowButton->setFlat(true);
     pSlideShowButton->setToolTip("Start/Stop Slide Show");
 
-    pixmap.load(":/resources/buttonIcons/PanelSetup.png");
+    pixmap.load(":/ButtonIcons/PanelSetup.png");
     ButtonIcon.addPixmap(pixmap);
     pGeneralSetupButton = new QPushButton(ButtonIcon, "");
     pGeneralSetupButton->setIconSize(pixmap.rect().size());
     pGeneralSetupButton->setFlat(true);
     pGeneralSetupButton->setToolTip("General Setup");
 
-    pixmap.load(":/resources/buttonIcons/Off.png");
+    pixmap.load(":/ButtonIcons/Off.png");
     ButtonIcon.addPixmap(pixmap);
     pSwitchOffButton = new QPushButton(ButtonIcon, "");
     pSwitchOffButton->setIconSize(pixmap.rect().size());
@@ -142,7 +160,7 @@ BtScoreController::GeneralSetup() {
 
 void
 BtScoreController::initBluetooth() {
-#if QT_CONFIG(permissions)
+#if QT_FEATURE_permissions
     QBluetoothPermission permission{};
     switch (qApp->checkPermission(permission)) {
     case Qt::PermissionStatus::Undetermined:
@@ -334,7 +352,7 @@ BtScoreController::processGeneralMessages(QString sMessage) {
 
     sToken = XML_Parse(sMessage, "startSpotLoop");
     if(sToken != sNoData) {
-        QPixmap pixmap(":/resources/buttonIcons/sign_stop.png");
+        QPixmap pixmap(":/ButtonIcons/sign_stop.png");
         QIcon ButtonIcon(pixmap);
         pSpotButton->setIcon(ButtonIcon);
         pSpotButton->setIconSize(pixmap.rect().size());
@@ -345,7 +363,7 @@ BtScoreController::processGeneralMessages(QString sMessage) {
 
     sToken = XML_Parse(sMessage, "endSpotLoop");
     if(sToken != sNoData) {
-        QPixmap pixmap(":/resources/buttonIcons/PlaySpots.png");
+        QPixmap pixmap(":/ButtonIcons/PlaySpots.png");
         QIcon ButtonIcon(pixmap);
         pSpotButton->setIcon(ButtonIcon);
         pSpotButton->setIconSize(pixmap.rect().size());
@@ -356,7 +374,7 @@ BtScoreController::processGeneralMessages(QString sMessage) {
 
     sToken = XML_Parse(sMessage, "startSlideShow");
     if(sToken != sNoData) {
-        QPixmap pixmap(":/resources/buttonIcons/sign_stop.png");
+        QPixmap pixmap(":/ButtonIcons/sign_stop.png");
         QIcon ButtonIcon(pixmap);
         pSlideShowButton->setIcon(ButtonIcon);
         pSlideShowButton->setIconSize(pixmap.rect().size());
@@ -367,7 +385,7 @@ BtScoreController::processGeneralMessages(QString sMessage) {
 
     sToken = XML_Parse(sMessage, "endSlideShow");
     if(sToken != sNoData) {
-        QPixmap pixmap(":/resources/buttonIcons/PlaySlides.png");
+        QPixmap pixmap(":/ButtonIcons/PlaySlides.png");
         QIcon ButtonIcon(pixmap);
         pSlideShowButton->setIcon(ButtonIcon);
         pSlideShowButton->setIconSize(pixmap.rect().size());

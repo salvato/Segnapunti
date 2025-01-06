@@ -308,13 +308,13 @@ VolleyController::CreateGameButtons() {
     auto* gameButtonLayout = new QHBoxLayout();
     QSize iconSize = QSize(48,48);
 
-    QPixmap* pPixmap = new QPixmap(":/resources/buttonIcons/ExchangeVolleyField.png");
+    QPixmap* pPixmap = new QPixmap(":/ButtonIcons/ExchangeVolleyField.png");
     pChangeFieldButton = new QPushButton(QIcon(*pPixmap), "");
     pChangeFieldButton->setIconSize(iconSize);
     pChangeFieldButton->setFlat(true);
     pChangeFieldButton->setToolTip("Inverti Campo");
 
-    pPixmap->load(":/resources/buttonIcons/New-Set-Volley.png");
+    pPixmap->load(":/ButtonIcons/New-Set-Volley.png");
     pNewSetButton  = new QPushButton(*pPixmap, "");
     pNewSetButton->setIconSize(iconSize);
     pNewSetButton->setFlat(true);
@@ -397,9 +397,9 @@ VolleyController::buildControls() {
 
     QPixmap plusPixmap, minusPixmap;
     QIcon plusButtonIcon, minusButtonIcon;
-    plusPixmap.load(":/resources/buttonIcons/Plus.png");
+    plusPixmap.load(":/ButtonIcons/Plus.png");
     plusButtonIcon.addPixmap(plusPixmap);
-    minusPixmap.load(":/resources/buttonIcons/Minus.png");
+    minusPixmap.load(":/ButtonIcons/Minus.png");
     minusButtonIcon.addPixmap(minusPixmap);
 
     QPalette pal = panelPalette;
@@ -452,7 +452,7 @@ VolleyController::buildControls() {
         if(iSet[iTeam] == gsArgs.maxSet)
             pSetsIncrement[iTeam]->setEnabled(false);
         // Service
-        QPixmap pixmap(QString(":/resources/ball%1.png").arg(iTeam));
+        QPixmap pixmap(QString(":/Ball%1.png").arg(iTeam));
         QIcon ButtonIcon(pixmap);
         pService[iTeam] = new Button("", iTeam);
         pService[iTeam]->setIcon(ButtonIcon);

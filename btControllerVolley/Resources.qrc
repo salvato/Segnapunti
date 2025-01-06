@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>myLogo.ico</file>
+        <file>Logo.ico</file>
         <file>Logo_SSD_UniMe.png</file>
         <file>Logo_UniMe.png</file>
         <file>ButtonIcons/ExchangeVolleyField.png</file>

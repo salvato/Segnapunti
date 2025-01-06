@@ -35,7 +35,7 @@ GeneralSetupDialog::GeneralSetupDialog(GeneralSetupArguments* pArguments)
     , pTempArguments(pArguments)
 {
     setWindowTitle("General Setup");
-    setWindowIcon(QIcon(":/resources/buttonIcons/PanelSetup.png"));
+    setWindowIcon(QIcon(":/ButtonIcons/PanelSetup.png"));
 
     panelPalette = QWidget::palette();
     panelGradient = QLinearGradient(0.0, 0.0, 0.0, height());
