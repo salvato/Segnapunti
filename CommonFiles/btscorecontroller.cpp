@@ -51,7 +51,7 @@ BtScoreController::BtScoreController(QFile *myLogFile, QWidget *parent)
 {
     qApp->installEventFilter(this);
     setWindowTitle("Score Controller - ©Gabriele Salvato (2025)");
-    setWindowIcon(QIcon(":/Logo.ico"));
+    setWindowIcon(QIcon(":/CommonFiles/Logo.ico"));
 
     pSpotButtonsLayout = CreateSpotButtons();
     connectButtonSignals();
@@ -118,7 +118,7 @@ BtScoreController::CreateSpotButtons() {
     pGeneralSetupButton->setFlat(true);
     pGeneralSetupButton->setToolTip("General Setup");
 
-    pixmap.load(":/ButtonIcons/Off.png");
+    pixmap.load(":/CommonFiles/ButtonIcons/Off.png");
     ButtonIcon.addPixmap(pixmap);
     pSwitchOffButton = new QPushButton(ButtonIcon, "");
     pSwitchOffButton->setIconSize(pixmap.rect().size());

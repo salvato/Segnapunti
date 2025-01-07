@@ -28,6 +28,6 @@ GeneralSetupArguments::GeneralSetupArguments()
 {
     sTeam[0] = "Locali";
     sTeam[1] = "Ospiti";
-    sTeamLogoFilePath[0] = ":/resources/Logo_SSD_UniMe.png";
-    sTeamLogoFilePath[1] = ":/resources/Logo_UniMe.png";
+    sTeamLogoFilePath[0] = ":/CommonFiles/Loghi/Logo_SSD_UniMe.png";
+    sTeamLogoFilePath[1] = ":/CommonFiles/Loghi/Logo_UniMe.png";
 }

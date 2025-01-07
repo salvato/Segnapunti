@@ -1,14 +1,8 @@
 <RCC>
     <qresource prefix="/">
-        <file>Logo.ico</file>
-        <file>Logo_SSD_UniMe.png</file>
-        <file>Logo_UniMe.png</file>
         <file>ButtonIcons/ExchangeVolleyField.png</file>
         <file>ButtonIcons/New-Game-Volley.png</file>
         <file>ButtonIcons/New-Set-Volley.png</file>
-        <file>Ball0.png</file>
-        <file>Ball1.png</file>
-        <file>ButtonIcons/Off.png</file>
         <file>../CommonFiles/ButtonIcons/GeneralSetup.png</file>
         <file>../CommonFiles/ButtonIcons/Minus.png</file>
         <file>../CommonFiles/ButtonIcons/PanelSetup.png</file>
@@ -16,6 +10,12 @@
         <file>../CommonFiles/ButtonIcons/PlaySpots.png</file>
         <file>../CommonFiles/ButtonIcons/Plus.png</file>
         <file>../CommonFiles/ButtonIcons/sign_stop.png</file>
-        <file>../CommonFiles/ButtonIcons/video-display.png</file>
+        <file>../CommonFiles/ButtonIcons/Off.png</file>
+        <file>../CommonFiles/Loghi/Logo.ico</file>
+        <file>../CommonFiles/Loghi/Logo_SSD_UniMe.png</file>
+        <file>../CommonFiles/Loghi/Logo_UniMe.png</file>
+        <file>../CommonFiles/Loghi/myLogo.png</file>
+        <file>../CommonFiles/ButtonIcons/Ball1.png</file>
+        <file>../CommonFiles/ButtonIcons/Ball0.png</file>
     </qresource>
 </RCC>
