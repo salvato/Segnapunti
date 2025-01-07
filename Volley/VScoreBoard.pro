@@ -73,7 +73,7 @@ DISTFILES += \
 ../CommonFiles/ButtonIcons/PlaySpots.png \
 ../CommonFiles/ButtonIcons/Plus.png \
 ../CommonFiles/ButtonIcons/sign_stop.png \
-../CommonFiles/ButtonIcons/video-display.png \
+../CommonFiles/ButtonIcons/Off.png \
 ../CommonFiles/Shaders/fAngular.glsl \
 ../CommonFiles/Shaders/fBookFlip.glsl \
 ../CommonFiles/Shaders/fBounce.glsl \

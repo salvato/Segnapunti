@@ -216,7 +216,7 @@ ScoreController::CreateSpotButtons() {
     pGeneralSetupButton->setFlat(true);
     pGeneralSetupButton->setToolTip("General Setup");
 
-    pixmap.load(":/CommonFiles/ButtonIcons/video-display.png");
+    pixmap.load(":/CommonFiles/ButtonIcons/Off.png");
     ButtonIcon.addPixmap(pixmap);
     pShutdownButton = new QPushButton(ButtonIcon, "");
     pShutdownButton->setIconSize(pixmap.rect().size());
