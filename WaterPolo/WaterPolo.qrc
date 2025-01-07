@@ -7,7 +7,6 @@
         <file>../CommonFiles/ButtonIcons/PlaySpots.png</file>
         <file>../CommonFiles/ButtonIcons/Plus.png</file>
         <file>../CommonFiles/ButtonIcons/sign_stop.png</file>
-        <file>../CommonFiles/ButtonIcons/video-display.png</file>
         <file>../CommonFiles/ShadersRPi4/fAngular.glsl</file>
         <file>../CommonFiles/ShadersRPi4/fAvatar.glsl</file>
         <file>../CommonFiles/ShadersRPi4/fBookFlip.glsl</file>
@@ -54,11 +53,7 @@
         <file>ButtonIcons/Go.png</file>
         <file>ButtonIcons/New-Game-Volley.png</file>
         <file>ButtonIcons/New-Set-Volley.png</file>
-        <file>ButtonIcons/PlaySpots.png</file>
         <file>ButtonIcons/StopTime.png</file>
-        <file>Logo_SSD_UniMe.png</file>
-        <file>Logo_UniMe.png</file>
-        <file>Logo.ico</file>
         <file>../CommonFiles/Shaders/fAngular.glsl</file>
         <file>../CommonFiles/Shaders/fBookFlip.glsl</file>
         <file>../CommonFiles/Shaders/fBounce.glsl</file>
@@ -86,5 +81,13 @@
         <file>../CommonFiles/Shaders/fWaterDrop.glsl</file>
         <file>../CommonFiles/Shaders/fWind.glsl</file>
         <file>../CommonFiles/Shaders/vShader.glsl</file>
+        <file>../CommonFiles/ButtonIcons/Ball0.png</file>
+        <file>../CommonFiles/ButtonIcons/Ball1.png</file>
+        <file>../CommonFiles/ButtonIcons/Ball2.png</file>
+        <file>../CommonFiles/ButtonIcons/Off.png</file>
+        <file>../CommonFiles/Loghi/Logo.ico</file>
+        <file>../CommonFiles/Loghi/Logo_SSD_UniMe.png</file>
+        <file>../CommonFiles/Loghi/Logo_UniMe.png</file>
+        <file>../CommonFiles/Loghi/myLogo.png</file>
     </qresource>
 </RCC>
