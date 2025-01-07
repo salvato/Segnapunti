@@ -97,21 +97,21 @@ QHBoxLayout*
 BtScoreController::CreateSpotButtons() {
     auto* spotButtonLayout = new QHBoxLayout();
 
-    QPixmap pixmap(":/ButtonIcons/PlaySpots.png");
+    QPixmap pixmap(":/CommonFiles/ButtonIcons/PlaySpots.png");
     QIcon ButtonIcon(pixmap);
     pSpotButton = new QPushButton(ButtonIcon, "");
     pSpotButton->setIconSize(pixmap.rect().size());
     pSpotButton->setFlat(true);
     pSpotButton->setToolTip("Start/Stop Spot Loop");
 
-    pixmap.load(":/ButtonIcons/PlaySlides.png");
+    pixmap.load(":/CommonFiles/ButtonIcons/PlaySlides.png");
     ButtonIcon.addPixmap(pixmap);
     pSlideShowButton = new QPushButton(ButtonIcon, "");
     pSlideShowButton->setIconSize(pixmap.rect().size());
     pSlideShowButton->setFlat(true);
     pSlideShowButton->setToolTip("Start/Stop Slide Show");
 
-    pixmap.load(":/ButtonIcons/PanelSetup.png");
+    pixmap.load(":/CommonFiles/ButtonIcons/PanelSetup.png");
     ButtonIcon.addPixmap(pixmap);
     pGeneralSetupButton = new QPushButton(ButtonIcon, "");
     pGeneralSetupButton->setIconSize(pixmap.rect().size());
@@ -352,7 +352,7 @@ BtScoreController::processGeneralMessages(QString sMessage) {
 
     sToken = XML_Parse(sMessage, "startSpotLoop");
     if(sToken != sNoData) {
-        QPixmap pixmap(":/ButtonIcons/sign_stop.png");
+        QPixmap pixmap(":/CommonFiles/ButtonIcons/sign_stop.png");
         QIcon ButtonIcon(pixmap);
         pSpotButton->setIcon(ButtonIcon);
         pSpotButton->setIconSize(pixmap.rect().size());
@@ -363,7 +363,7 @@ BtScoreController::processGeneralMessages(QString sMessage) {
 
     sToken = XML_Parse(sMessage, "endSpotLoop");
     if(sToken != sNoData) {
-        QPixmap pixmap(":/ButtonIcons/PlaySpots.png");
+        QPixmap pixmap(":/CommonFiles/ButtonIcons/PlaySpots.png");
         QIcon ButtonIcon(pixmap);
         pSpotButton->setIcon(ButtonIcon);
         pSpotButton->setIconSize(pixmap.rect().size());
@@ -374,7 +374,7 @@ BtScoreController::processGeneralMessages(QString sMessage) {
 
     sToken = XML_Parse(sMessage, "startSlideShow");
     if(sToken != sNoData) {
-        QPixmap pixmap(":/ButtonIcons/sign_stop.png");
+        QPixmap pixmap(":/CommonFiles/ButtonIcons/sign_stop.png");
         QIcon ButtonIcon(pixmap);
         pSlideShowButton->setIcon(ButtonIcon);
         pSlideShowButton->setIconSize(pixmap.rect().size());
@@ -385,7 +385,7 @@ BtScoreController::processGeneralMessages(QString sMessage) {
 
     sToken = XML_Parse(sMessage, "endSlideShow");
     if(sToken != sNoData) {
-        QPixmap pixmap(":/ButtonIcons/PlaySlides.png");
+        QPixmap pixmap(":/CommonFiles/ButtonIcons/PlaySlides.png");
         QIcon ButtonIcon(pixmap);
         pSlideShowButton->setIcon(ButtonIcon);
         pSlideShowButton->setIconSize(pixmap.rect().size());

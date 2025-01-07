@@ -397,9 +397,9 @@ VolleyController::buildControls() {
 
     QPixmap plusPixmap, minusPixmap;
     QIcon plusButtonIcon, minusButtonIcon;
-    plusPixmap.load(":/ButtonIcons/Plus.png");
+    plusPixmap.load(":/../CommonFiles/ButtonIcons/Plus.png");
     plusButtonIcon.addPixmap(plusPixmap);
-    minusPixmap.load(":/ButtonIcons/Minus.png");
+    minusPixmap.load(":/../CommonFiles/ButtonIcons/Minus.png");
     minusButtonIcon.addPixmap(minusPixmap);
 
     QPalette pal = panelPalette;
