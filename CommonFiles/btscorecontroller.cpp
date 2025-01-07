@@ -32,8 +32,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #if QT_FEATURE_permissions
 #include <QtCore/qcoreapplication.h>
 #include <QtCore/qpermissions.h>
-#include <QtWidgets/qmessagebox.h>
 #endif
+#include <QtWidgets/qmessagebox.h>
 
 
 using namespace Qt::StringLiterals;
