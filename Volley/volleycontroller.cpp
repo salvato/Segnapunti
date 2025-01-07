@@ -290,8 +290,8 @@ VolleyController::GetSettings() {
     gsArgs.sSlideDir            = pSettings->value("directories/slides", gsArgs.sSlideDir).toString();
     gsArgs.sSpotDir             = pSettings->value("directories/spots",  gsArgs.sSpotDir).toString();
     gsArgs.isPanelMirrored      = pSettings->value("panel/orientation",  true).toBool();
-    gsArgs.sTeamLogoFilePath[0] = pSettings->value("panel/logo0", ":/Logo_UniMe.png").toString();
-    gsArgs.sTeamLogoFilePath[1] = pSettings->value("panel/logo1", ":/Logo_SSD_UniMe.png").toString();
+    gsArgs.sTeamLogoFilePath[0] = pSettings->value("panel/logo0", ":/../CommonFiles/Loghi/Logo_UniMe.png").toString();
+    gsArgs.sTeamLogoFilePath[1] = pSettings->value("panel/logo1", ":/../CommonFiles/Loghi/Logo_SSD_UniMe.png").toString();
     gsArgs.sTeam[0]             = pSettings->value("team1/name", QString(tr("Locali"))).toString();
     gsArgs.sTeam[1]             = pSettings->value("team2/name", QString(tr("Ospiti"))).toString();
 
@@ -462,7 +462,7 @@ VolleyController::buildControls() {
         if(iSet[iTeam] == gsArgs.maxSet)
             pSetsIncrement[iTeam]->setEnabled(false);
         // Service
-        QPixmap pixmap(QString(":/ButtonIcons/ball%1.png").arg(iTeam));
+        QPixmap pixmap(QString(":/CommonFiles/ButtonIcons/Ball%1.png").arg(iTeam));
         QIcon ButtonIcon(pixmap);
         pService[iTeam] = new Button("", iTeam);
         pService[iTeam]->setIcon(ButtonIcon);

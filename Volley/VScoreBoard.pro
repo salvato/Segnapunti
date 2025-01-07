@@ -130,4 +130,4 @@ DISTFILES += \
 ../CommonFiles/ShadersRPi4/vShader.glsl \
 .gitignore \
 
-win32:RC_ICONS += Logo.ico
+windows:RC_ICONS += ../CommonFiles/Loghi/Logo.ico

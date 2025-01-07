@@ -34,8 +34,8 @@ VolleyPanel::VolleyPanel(QFile *myLogFile, QWidget *parent)
     , maxTeamNameLen(15)
     , pTimeoutWindow(Q_NULLPTR)
 {
-    pPixmapLogo[0] = new QPixmap(QString(":/Logo_SSD_UniMe.png"));
-    pPixmapLogo[1] = new QPixmap(QString(":/Logo_UniMe.png"));
+    pPixmapLogo[0] = new QPixmap(QString(":/CommonFiles/Loghi/Logo_SSD_UniMe.png"));
+    pPixmapLogo[1] = new QPixmap(QString(":/CommonFiles/Loghi/Logo_UniMe.png"));
 
     sFontName = QString("Liberation Sans Bold");
     fontWeight = QFont::Black;
@@ -230,7 +230,7 @@ VolleyPanel::createPanel() {
         iright = 0;
     }
 
-    pPixmapService = new QPixmap(":/ButtonIcons/ball2.png");
+    pPixmapService = new QPixmap(":/CommonFiles/ButtonIcons/Ball2.png");
     *pPixmapService = pPixmapService->scaled(2*iLabelsFontSize/3, 2*iLabelsFontSize/3);
 
     layout->addWidget(pTeam[ileft],      0, 0, 2, 6, Qt::AlignHCenter|Qt::AlignVCenter);
