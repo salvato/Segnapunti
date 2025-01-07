@@ -193,7 +193,7 @@ bool
 SlideWidget::prepareNextSlide() {
     QImage newImage;
     if(slideList.isEmpty())
-        slideList.append(QFileInfo(":/Logo_UniMe.png"));
+        slideList.append(QFileInfo(":/CommonFiles/Loghi/Logo_UniMe.png"));
     newImage.load(slideList.at(iCurrentSlide).absoluteFilePath());
     image = newImage.scaled(pBaseImage->size(),
                             Qt::KeepAspectRatio).mirrored();

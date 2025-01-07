@@ -51,7 +51,7 @@ ScoreController::ScoreController(QFile *myLogFile, QWidget *parent)
     qApp->installEventFilter(this);
 
     setWindowTitle("Score Controller - ©Gabriele Salvato (2025)");
-    setWindowIcon(QIcon(":/Logo.ico"));
+    setWindowIcon(QIcon(":/CommonFiles/Loghi/Logo.ico"));
 
     iCurrentSpot = 0;
     pSpotButtonsLayout = CreateSpotButtons();

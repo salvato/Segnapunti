@@ -31,8 +31,8 @@ WaterPoloPanel::WaterPoloPanel(QFile *myLogFile, QWidget *parent)
     , iServizio(0)
     , maxTeamNameLen(15)
 {
-    pPixmapLogo[0] = new QPixmap(QString(":/../CommonFiles/Logo_UniMe.png"));
-    pPixmapLogo[1] = new QPixmap(QString(":/../CommonFiles/Logo_SSD_UniMe.png"));
+    pPixmapLogo[0] = new QPixmap(QString(":/../CommonFiles/Loghi/Logo_UniMe.png"));
+    pPixmapLogo[1] = new QPixmap(QString(":/../CommonFiles/Loghi/Logo_SSD_UniMe.png"));
 
     sFontName = QString("Liberation Sans Bold");
     fontWeight = QFont::Black;

@@ -136,7 +136,6 @@ DISTFILES += \
     ButtonIcons/Go.png \
     ButtonIcons/New-Game-Volley.png \
     ButtonIcons/New-Set-Volley.png \
-    ButtonIcons/PlaySpots.png \
     ButtonIcons/StopTime.png \
     Images/Cartella.png \
     Images/Controller.png \
@@ -155,9 +154,8 @@ DISTFILES += \
     Images/Stop.png \
     Images/Tabellone.png \
     LICENSE \
-    Logo.ico \
     README.md \
     Waterpolo.odt \
     Waterpolo.pdf
 
-win32:RC_ICONS += Logo.ico
+windows:RC_ICONS += ../CommonFiles/Loghi/Logo.ico

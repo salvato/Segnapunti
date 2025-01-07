@@ -47,7 +47,7 @@ WaterPoloCtrl::WaterPoloCtrl(QFile *myLogFile, QWidget *parent)
     , runMilliSeconds(0)
 {
     setWindowTitle("Score Controller - © Gabriele Salvato (2025)");
-    setWindowIcon(QIcon(":/Logo.ico"));
+    setWindowIcon(QIcon(":/../CommonFiles/Loghi/Logo.ico"));
 
     panelPalette = QWidget::palette();
     panelGradient = QLinearGradient(0.0, 0.0, 0.0, height());
@@ -851,7 +851,7 @@ WaterPoloCtrl::onTeamTextChanged(QString sText, int iTeam) {
 
 void
 WaterPoloCtrl::onButtonChangeFieldClicked() {
-    int iRes = QMessageBox::question(this, tr("Volley_Controller"),
+    int iRes = QMessageBox::question(this, tr("Waterpolo_Controller"),
                                      tr("Scambiare il campo delle squadre ?"),
                                      QMessageBox::Yes | QMessageBox::No,
                                      QMessageBox::No);
