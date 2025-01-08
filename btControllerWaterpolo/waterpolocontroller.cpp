@@ -585,8 +585,9 @@ WaterpoloController::onTimeOutDecrement(int iTeam) {
 void
 WaterpoloController::onCountStart(int iTeam) {
     Q_UNUSED(iTeam)
-//TODO
-    //tempoTimer.restart();
+    QString sText = QString("<startT>%1</startT>")
+                        .arg(1,1);
+    sendMessage(sText);
     pCountStart->setDisabled(true);
     pCountStop->setEnabled(true);
     disableUi();
@@ -596,9 +597,9 @@ WaterpoloController::onCountStart(int iTeam) {
 void
 WaterpoloController::onCountStop(int iTeam) {
     Q_UNUSED(iTeam)
-    //TODO
-    //runMilliSeconds += tempoTimer.elapsed();
-    //tempoTimer.invalidate();
+    QString sText = QString("<stopT>%1</stopT>")
+                        .arg(1,1);
+    sendMessage(sText);
     pCountStart->setEnabled(true);
     pCountStop->setDisabled(true);
     pTimeEdit->setEnabled(true);

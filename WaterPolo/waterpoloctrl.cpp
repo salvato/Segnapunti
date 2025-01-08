@@ -1053,6 +1053,16 @@ WaterPoloCtrl::processBtMessage(QString sMessage) {
     int iTeam;
     QString sNoData = QString("NoData");
 
+    sToken = XML_Parse(sMessage, "startT");
+    if(sToken != sNoData) {
+        onCountStart(0);
+    }// start Time
+
+    sToken = XML_Parse(sMessage, "stopT");
+    if(sToken != sNoData) {
+        onCountStop(0);
+    }// start Time
+
     sToken = XML_Parse(sMessage, "team0");
     if(sToken != sNoData) {
         onTeamTextChanged(sToken.left(maxTeamNameLen), 0);
