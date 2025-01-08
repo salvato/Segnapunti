@@ -236,6 +236,25 @@ BtScoreController::SaveStatus() {
 
 
 void
+BtScoreController::disableGeneralButtons() {
+    pSpotButton->setDisabled(true);
+    pSlideShowButton->setDisabled(true);
+    pSwitchOffButton->setDisabled(true);
+    pGeneralSetupButton->setDisabled(true);
+}
+
+
+void
+BtScoreController::enableGeneralButtons() {
+    pSpotButton->setEnabled(true);
+    pSlideShowButton->setEnabled(true);
+    pSwitchOffButton->setEnabled(true);
+    pGeneralSetupButton->setEnabled(true);
+}
+
+
+
+void
 BtScoreController::onButtonSetupClicked() {
     GeneralSetup();
 }

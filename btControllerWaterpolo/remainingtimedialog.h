@@ -1,6 +1,6 @@
 /*
  *
-Copyright (C) 2025  Gabriele Salvato
+Copyright (C) 2023  Gabriele Salvato
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,29 +19,37 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include <QApplication>
+#include <QDialog>
+#include <QObject>
+#include <QLineEdit>
+#include <QPushButton>
 
 
-QT_FORWARD_DECLARE_CLASS(QSettings)
-QT_FORWARD_DECLARE_CLASS(WaterpoloController)
-QT_FORWARD_DECLARE_CLASS(QFile)
-
-
-class WaterpoloApplication : public QApplication
+class
+RemainingTimeDialog : public QDialog
 {
     Q_OBJECT
+public:
+    RemainingTimeDialog();
+
+private:
+    QLineEdit   minuteEdit;
+    QLineEdit   secondsEdit;
+    QPushButton buttonOk;
+    QPushButton buttonCancel;
+    QString     sErrorFormat;
+    QString     sCorrectFormat;
+
+public slots:
+    void onCancelClicked();
+    void onOkClicked();
+    void onMinuteChanged(QString sText);
+    void onSecondsChanged(QString sText);
 
 public:
-    WaterpoloApplication(int& argc, char** argvr);
-    ~WaterpoloApplication();
-
-private:
-    bool PrepareLogFile();
-
-private:
-    QSettings*           pSettings;
-    QFile*               pLogFile;
-    WaterpoloController* pScoreController;
-    QString              sLanguage;
-    QString              logFileName;
+    void setMinutes(int minutes);
+    void setSeconds(int seconds);
+    int getMinutes();
+    int getSeconds();
 };
+

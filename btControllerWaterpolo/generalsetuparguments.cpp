@@ -1,6 +1,6 @@
 /*
  *
-Copyright (C) 2025  Gabriele Salvato
+Copyright (C) 2024  Gabriele Salvato
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,32 +16,16 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *
 */
+#include <QStandardPaths>
 
-#pragma once
-
-#include <QApplication>
-
-
-QT_FORWARD_DECLARE_CLASS(QSettings)
-QT_FORWARD_DECLARE_CLASS(WaterpoloController)
-QT_FORWARD_DECLARE_CLASS(QFile)
+#include "generalsetuparguments.h"
 
 
-class WaterpoloApplication : public QApplication
+GeneralSetupArguments::GeneralSetupArguments()
+    : maxTimeout(2)
+    , maxPeriods(4)
+    , iTimeDuration(8) //In minutes
 {
-    Q_OBJECT
-
-public:
-    WaterpoloApplication(int& argc, char** argvr);
-    ~WaterpoloApplication();
-
-private:
-    bool PrepareLogFile();
-
-private:
-    QSettings*           pSettings;
-    QFile*               pLogFile;
-    WaterpoloController* pScoreController;
-    QString              sLanguage;
-    QString              logFileName;
-};
+    sTeam[0] = "Locali";
+    sTeam[1] = "Ospiti";
+}

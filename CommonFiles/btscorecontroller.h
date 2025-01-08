@@ -53,6 +53,8 @@ protected:
     void            stopBtDiscovery();
     virtual void    processTextMessage(QString sMessage);
     void            processGeneralMessages(QString sMessage);
+    void            disableGeneralButtons();
+    void            enableGeneralButtons();
 
 protected:
     GeneralSetupArguments gsArgs;

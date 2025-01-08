@@ -16,32 +16,21 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *
 */
-
 #pragma once
-
-#include <QApplication>
-
-
-QT_FORWARD_DECLARE_CLASS(QSettings)
-QT_FORWARD_DECLARE_CLASS(WaterpoloController)
-QT_FORWARD_DECLARE_CLASS(QFile)
+#include <QString>
 
 
-class WaterpoloApplication : public QApplication
+class GeneralSetupArguments
 {
-    Q_OBJECT
+public:
+    GeneralSetupArguments();
 
 public:
-    WaterpoloApplication(int& argc, char** argvr);
-    ~WaterpoloApplication();
+    int maxTimeout;
+    int maxPeriods;
+    int iTimeDuration;
 
-private:
-    bool PrepareLogFile();
+    bool isPanelMirrored;
 
-private:
-    QSettings*           pSettings;
-    QFile*               pLogFile;
-    WaterpoloController* pScoreController;
-    QString              sLanguage;
-    QString              logFileName;
+    QString sTeam[2];
 };
