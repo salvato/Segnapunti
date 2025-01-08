@@ -649,6 +649,11 @@ WaterpoloController::processTextMessage(QString sMessage) {
     sToken = XML_Parse(sMessage, "time");
     if(sToken != sNoData){
         pTimeEdit->setText(sToken);
+        if(sToken==QString("0:00")) {
+            enableUi();
+            pCountStart->setDisabled(true);
+            pCountStop->setDisabled(true);
+        }
     }// time
 
     sToken = XML_Parse(sMessage, "startT");
