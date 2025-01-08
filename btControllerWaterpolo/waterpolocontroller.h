@@ -76,6 +76,7 @@ private:
 #ifdef Q_OS_ANDROID
     void          keepScreenOn();
 #endif
+    void startNewPeriod();
 
 private:
     RemainingTimeDialog* pRemainingTimeDialog;

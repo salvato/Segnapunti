@@ -652,6 +652,44 @@ WaterpoloController::onChangePanelOrientation(PanelOrientation orientation) {
 
 
 void
+WaterpoloController::startNewPeriod() {
+    pCountStart->setEnabled(true);
+    pCountStop->setDisabled(true);
+    QString sText = QString("%1").arg(iPeriod);
+    pPeriodEdit->setText(sText);
+    if(iPeriod == 3) { // Le squadre compresi i giocatori, allenatori e dirigenti,
+        // cambiano campo prima dell’inizio del 3° tempo.
+        // Exchange team's order in the field
+        QString sText = gsArgs.sTeam[0];
+        gsArgs.sTeam[0] = gsArgs.sTeam[1];
+        gsArgs.sTeam[1] = sText;
+        pTeamName[0]->setText(gsArgs.sTeam[0]);
+        pTeamName[1]->setText(gsArgs.sTeam[1]);
+    }
+
+    for(int iTeam=0; iTeam<2; iTeam++) {
+        iTimeout[iTeam] = 0;
+        sText = QString("%1").arg(iTimeout[iTeam], 1);
+        pTimeoutEdit[iTeam]->setText(sText);
+        pTimeoutEdit[iTeam]->setStyleSheet("background-color: rgba(0, 0, 0, 0);color:yellow; border: none");
+        pTimeoutDecrement[iTeam]->setEnabled(false);
+        pTimeoutIncrement[iTeam]->setEnabled(true);
+    }
+    remainingMilliSeconds = gsArgs.iTimeDuration * 60000;
+    runMilliSeconds = 0;
+
+    QString sRemainingTime;
+    lldiv_t iRes = div(remainingMilliSeconds+999, 60000LL);
+    int iMinutes = int(iRes.quot);
+    int iSeconds = int(iRes.rem/1000);
+    sRemainingTime = QString("%1:%2").arg(iMinutes, 1)
+                         .arg(iSeconds, 2, 10, QChar('0'));
+    pTimeEdit->setText(sRemainingTime);
+    SaveStatus();
+}
+
+
+void
 WaterpoloController::processTextMessage(QString sMessage) {
     QString sToken;
     bool ok;
@@ -676,6 +714,16 @@ WaterpoloController::processTextMessage(QString sMessage) {
         pCountStop->setDisabled(true);
         enableUi();
     }// start time
+
+    sToken = XML_Parse(sMessage, "period");
+    if(sToken != sNoData){
+        iPeriod = sToken.toInt();
+        QString sText = QString("%1").arg(iPeriod);
+        pPeriodEdit->setText(sText);
+        sText = QString("game/period");
+        pSettings->setValue(sText, iPeriod);
+        pPeriodEdit->setFocus(); // Per evitare che il focus vada altrove
+    }// period
 
     sToken = XML_Parse(sMessage, "team0");
     if(sToken != sNoData){
