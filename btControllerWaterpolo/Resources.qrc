@@ -1,8 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>ButtonIcons/ExchangeVolleyField.png</file>
-        <file>ButtonIcons/New-Game-Volley.png</file>
-        <file>ButtonIcons/New-Set-Volley.png</file>
         <file>../CommonFiles/ButtonIcons/GeneralSetup.png</file>
         <file>../CommonFiles/ButtonIcons/Minus.png</file>
         <file>../CommonFiles/ButtonIcons/PanelSetup.png</file>
@@ -19,5 +16,7 @@
         <file>../CommonFiles/ButtonIcons/Ball0.png</file>
         <file>ButtonIcons/Go.png</file>
         <file>ButtonIcons/StopTime.png</file>
+        <file>ButtonIcons/Exchange.png</file>
+        <file>ButtonIcons/NewPeriod.png</file>
     </qresource>
 </RCC>

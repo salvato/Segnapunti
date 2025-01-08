@@ -270,19 +270,19 @@ WaterPoloCtrl::CreateGameButtons() {
     auto* gameButtonLayout = new QHBoxLayout();
     QSize iconSize = QSize(48,48);
 
-    QPixmap* pPixmap = new QPixmap(":/ButtonIcons/ExchangeVolleyField.png");
+    QPixmap* pPixmap = new QPixmap(":/ButtonIcons/Exchange.png");
     pChangeFieldButton = new QPushButton(QIcon(*pPixmap), "");
     pChangeFieldButton->setIconSize(iconSize);
     pChangeFieldButton->setFlat(true);
     pChangeFieldButton->setToolTip("Inverti Campo");
 
-    pPixmap->load(":/ButtonIcons/New-Game-Volley.png");
+    pPixmap->load(":/ButtonIcons/water-polo-ball.png");
     pNewGameButton = new QPushButton(QIcon(*pPixmap), "");
     pNewGameButton->setIconSize(iconSize);
     pNewGameButton->setFlat(true);
     pNewGameButton->setToolTip("Nuova Partita");
 
-    pPixmap->load(":/ButtonIcons/New-Set-Volley.png");
+    pPixmap->load(":/ButtonIcons/NewPeriod.png");
     pNewPeriodButton  = new QPushButton(*pPixmap, "");
     pNewPeriodButton->setIconSize(iconSize);
     pNewPeriodButton->setFlat(true);

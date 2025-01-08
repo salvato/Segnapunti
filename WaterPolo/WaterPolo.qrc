@@ -49,10 +49,7 @@
         <file>../CommonFiles/ShadersRPi4/vRace.glsl</file>
         <file>../CommonFiles/ShadersRPi4/vShader.glsl</file>
         <file>../CommonFiles/ShadersRPi4/vText.glsl</file>
-        <file>ButtonIcons/ExchangeVolleyField.png</file>
         <file>ButtonIcons/Go.png</file>
-        <file>ButtonIcons/New-Game-Volley.png</file>
-        <file>ButtonIcons/New-Set-Volley.png</file>
         <file>ButtonIcons/StopTime.png</file>
         <file>../CommonFiles/Shaders/fAngular.glsl</file>
         <file>../CommonFiles/Shaders/fBookFlip.glsl</file>
@@ -89,5 +86,8 @@
         <file>../CommonFiles/Loghi/Logo_SSD_UniMe.png</file>
         <file>../CommonFiles/Loghi/Logo_UniMe.png</file>
         <file>../CommonFiles/Loghi/myLogo.png</file>
+        <file>ButtonIcons/water-polo-ball.png</file>
+        <file>ButtonIcons/NewPeriod.png</file>
+        <file>ButtonIcons/Exchange.png</file>
     </qresource>
 </RCC>
