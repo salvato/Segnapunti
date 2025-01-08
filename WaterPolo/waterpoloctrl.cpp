@@ -789,6 +789,9 @@ WaterPoloCtrl::onCountStart(int iTeam) {
     pCountStart->setDisabled(true);
     pCountStop->setEnabled(true);
     disableUi();
+    QString sText;
+    sText = QString("startT%1/startT").arg(0, 1);
+    pTimeoutEdit[iTeam]->setText(sText);
 }
 
 
@@ -801,6 +804,9 @@ WaterPoloCtrl::onCountStop(int iTeam) {
     pCountStop->setDisabled(true);
     pTimeEdit->setEnabled(true);
     enableUi();
+    QString sText;
+    sText = QString("stopT%1/stopT").arg(0, 1);
+    pTimeoutEdit[iTeam]->setText(sText);
 }
 
 

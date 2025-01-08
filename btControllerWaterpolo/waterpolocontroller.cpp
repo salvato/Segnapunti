@@ -663,6 +663,21 @@ WaterpoloController::processTextMessage(QString sMessage) {
         pTimeEdit->setText(sToken);
     }// time
 
+    sToken = XML_Parse(sMessage, "startT");
+    if(sToken != sNoData){
+        pCountStart->setDisabled(true);
+        pCountStop->setEnabled(true);
+        disableUi();
+    }// start time
+
+    sToken = XML_Parse(sMessage, "stopT");
+    if(sToken != sNoData){
+        pCountStart->setEnabled(true);
+        pCountStop->setDisabled(true);
+        pTimeEdit->setEnabled(true);
+        enableUi();
+    }// start time
+
     sToken = XML_Parse(sMessage, "team0");
     if(sToken != sNoData){
         pTeamName[0]->setText(sToken.left(maxTeamNameLen));
