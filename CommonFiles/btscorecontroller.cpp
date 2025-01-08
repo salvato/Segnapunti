@@ -208,6 +208,7 @@ BtScoreController::sendMessage(const QString& sMessage) {
 
 void
 BtScoreController::try2ConnectBt() {
+    // qCritical() << __FUNCTION__ << __LINE__;
     if(pTempClient) {
         pTempClient->disconnect();
         pTempClient->deleteLater();
@@ -216,8 +217,8 @@ BtScoreController::try2ConnectBt() {
     QBluetoothServiceInfo serviceInfo;
     QBluetoothAddress address(pSettings->value("ServerAddress", "").toString());
     QBluetoothUuid uuid(pSettings->value("ServerUUID", "").toString());
-    qCritical() << "BtAddress:" << address.toString();
-    qCritical() << "BtUUID   :" << uuid.toString();
+    // qCritical() << "BtAddress:" << address.toString();
+    // qCritical() << "BtUUID   :" << uuid.toString();
     if((!address.isNull()) && (!uuid.isNull())) {
         pTempClient = new BtClient(this);
         pTempClient->startClient(address, uuid);
@@ -287,6 +288,7 @@ BtScoreController::onOffButtonClicked() {
 
 void
 BtScoreController::startBtDiscovery(const QBluetoothUuid &uuid) {
+    // qCritical() << __FUNCTION__ << __LINE__;
     if (pBtDiscoveryAgent->isActive())
         pBtDiscoveryAgent->stop();
     pBtDiscoveryAgent->setUuidFilter(uuid);
@@ -297,6 +299,7 @@ BtScoreController::startBtDiscovery(const QBluetoothUuid &uuid) {
 
 void
 BtScoreController::stopBtDiscovery() {
+    // qCritical() << __FUNCTION__ << __LINE__;
     if (pBtDiscoveryAgent) {
         pBtDiscoveryAgent->stop();
     }
@@ -305,6 +308,7 @@ BtScoreController::stopBtDiscovery() {
 
 void
 BtScoreController::serviceDiscovered(const QBluetoothServiceInfo &serviceInfo) {
+    // qCritical() << __FUNCTION__ << __LINE__;
     pSettings->setValue("ServerAddress", serviceInfo.device().address().toString());
     pSettings->setValue("ServerUUID", serviceInfo.serviceUuid().toString());
 
@@ -327,6 +331,7 @@ BtScoreController::serviceDiscovered(const QBluetoothServiceInfo &serviceInfo) {
 
 void
 BtScoreController::discoveryFinished() {
+    // qCritical() << __FUNCTION__ << __LINE__;
     if(!pPanelClient)
         try2ConnectBt();
 }
@@ -398,9 +403,10 @@ BtScoreController::processGeneralMessages(QString sMessage) {
 
 void
 BtScoreController::onPanelClientConnected(QString sName) {
+    // qCritical() << __FUNCTION__ << __LINE__;
     Q_UNUSED(sName)
-    stopBtDiscovery();
     pPanelClient = pTempClient;
+    stopBtDiscovery();
     setEnabled(true);
     connect(pPanelClient, SIGNAL(disconnected()),
             this, SLOT(onPanelClientDisconnected()));
@@ -413,6 +419,7 @@ BtScoreController::onPanelClientConnected(QString sName) {
 
 void
 BtScoreController::onPanelClientDisconnected() {
+    // qCritical() << __FUNCTION__ << __LINE__;
     setDisabled(true);
     if(pPanelClient) {
         pPanelClient->disconnect();
@@ -425,6 +432,7 @@ BtScoreController::onPanelClientDisconnected() {
 
 void
 BtScoreController::onPanelClientSocketError(QString sError) {
+    // qCritical() << __FUNCTION__ << __LINE__;
     Q_UNUSED(sError)
     setDisabled(true);
     if(pPanelClient) {

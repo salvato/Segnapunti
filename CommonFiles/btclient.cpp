@@ -95,7 +95,7 @@ BtClient::onSocketErrorOccurred(QBluetoothSocket::SocketError error) {
     QMetaEnum metaEnum = QMetaEnum::fromType<QBluetoothSocket::SocketError>();
     QString errorString = pSocket->peerName() + ' '_L1
                           + metaEnum.valueToKey(static_cast<int>(error)) + " occurred"_L1;
-    qCritical() << errorString;
+    // qCritical() << errorString;
     emit socketErrorOccurred(errorString);
 }
 
