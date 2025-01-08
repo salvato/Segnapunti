@@ -674,7 +674,6 @@ WaterpoloController::processTextMessage(QString sMessage) {
     if(sToken != sNoData){
         pCountStart->setEnabled(true);
         pCountStop->setDisabled(true);
-        pTimeEdit->setEnabled(true);
         enableUi();
     }// start time
 
