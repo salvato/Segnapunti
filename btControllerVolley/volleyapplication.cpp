@@ -34,8 +34,11 @@ VolleyApplication::VolleyApplication(int &argc, char **argv)
     srand(uint(time.msecsSinceStartOfDay()));
 
     pScoreController = new VolleyController(pLogFile);
+#ifdef Q_OS_ANDROID
     pScoreController->showFullScreen();
-    //pScoreController->show();
+#else
+    pScoreController->show();
+#endif
 }
 
 
