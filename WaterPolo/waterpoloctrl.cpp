@@ -1166,10 +1166,13 @@ WaterPoloCtrl::processBtMessage(QString sMessage) {
             runMilliSeconds = gsArgs.iTimeDuration * 60000-mSecToGo;
             if(runMilliSeconds >= 0) {
                 QString sRemainingTime = QString("%1:%2")
-                .arg(minutes, 1)
-                    .arg(seconds, 2, 10, QChar('0'));
+                                             .arg(minutes, 1)
+                                             .arg(seconds, 2, 10, QChar('0'));
                 pTimeEdit->setText(sRemainingTime);
                 pCountStart->setEnabled(true);
+                QString sMessage = QString("<time>%1</time>")
+                                       .arg(sRemainingTime);
+                pBtServer->sendMessage(sMessage);
             }
         }
     }// Change Remaining Time
