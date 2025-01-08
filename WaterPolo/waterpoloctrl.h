@@ -125,5 +125,8 @@ private:
     QElapsedTimer   tempoTimer;
     qint64          runMilliSeconds;
     qint64          remainingMilliSeconds;
+    int lastM;
+    int lastS;
+
 };
 

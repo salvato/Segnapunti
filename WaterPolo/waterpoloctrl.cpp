@@ -45,6 +45,8 @@ WaterPoloCtrl::WaterPoloCtrl(QFile *myLogFile, QWidget *parent)
     , bFontBuilt(false)
     , maxTeamNameLen(15)
     , runMilliSeconds(0)
+    , lastM(-1)
+    , lastS(-1)
 {
     setWindowTitle("Score Controller - © Gabriele Salvato (2025)");
     setWindowIcon(QIcon(":/../CommonFiles/Loghi/Logo.ico"));
@@ -643,6 +645,8 @@ WaterPoloCtrl::onGameTimeChanging() {
     int seconds = sTime.right(2).toInt();
     pRemainingTimeDialog->setMinutes(minutes);
     pRemainingTimeDialog->setSeconds(seconds);
+    lastM = minutes;
+    lastS = seconds;
     if(pRemainingTimeDialog->exec() == QDialog::Accepted) {
         minutes = pRemainingTimeDialog->getMinutes();
         seconds = pRemainingTimeDialog->getSeconds();
@@ -680,11 +684,18 @@ WaterPoloCtrl::onTimeUpdate() {
         lldiv_t iRes = div(timeToStop+999, 60000LL);
         int iMinutes = int(iRes.quot);
         int iSeconds = int(iRes.rem/1000);
-        sRemainingTime = QString("%1:%2")
-                             .arg(iMinutes, 1)
-                             .arg(iSeconds, 2, 10, QChar('0'));
-        pTimeEdit->setText(sRemainingTime);
-        pWaterPoloPanel->setTime(sRemainingTime);
+        if((lastS != iSeconds) || (lastM != iMinutes)) {
+            sRemainingTime = QString("%1:%2")
+                                 .arg(iMinutes, 1)
+                                 .arg(iSeconds, 2, 10, QChar('0'));
+            pTimeEdit->setText(sRemainingTime);
+            pWaterPoloPanel->setTime(sRemainingTime);
+            QString sMessage = QString("<time>%1</time>")
+                                   .arg(sRemainingTime);
+            pBtServer->sendMessage(sMessage);
+            lastS = iSeconds;
+            lastM = iMinutes;
+        }
     }
 }
 

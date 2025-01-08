@@ -58,8 +58,7 @@ private slots:
     void onGameTimeChanging();
 //TODO
     // void onTimeUpdate();
-    void onPeriodIncrement(int);
-    void onPeriodDecrement(int);
+    void onButtonNewPeriodClicked();
     void onTimeOutIncrement(int iTeam);
     void onTimeOutDecrement(int iTeam);
     void onCountStart(int iTeam);
@@ -89,8 +88,6 @@ private:
     Edit*         pScoreEdit[2]{};
     Edit*         pPeriodEdit{};
     Edit*         pTimeEdit{};
-    Button*       pPeriodIncrement;
-    Button*       pPeriodDecrement;
     Button*       pTimeoutIncrement[2]{};
     Button*       pTimeoutDecrement[2]{};
     Button*       pScoreIncrement[2]{};

@@ -41,7 +41,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 WaterpoloController::WaterpoloController(QFile *myLogFile, QWidget *parent)
     : BtScoreController(myLogFile, parent)
+    , pRemainingTimeDialog(new RemainingTimeDialog)
+    , iPeriod(1)
     , bFontBuilt(false)
+    , runMilliSeconds(0)
 {
     setWindowTitle("Bluetooth Score Controller - © Gabriele Salvato (2025)");
     setWindowIcon(QIcon(":/../CommonFiles/Loghi/Logo.ico"));
@@ -343,6 +346,7 @@ WaterpoloController::buildControls() {
         pTeamName[iTeam]->setMaxLength(MAX_NAMELENGTH);
         pal.setColor(QPalette::Text, Qt::white);
         pTeamName[iTeam]->setPalette(pal);
+        pTeamName[iTeam]->setReadOnly(true);
 
         // Timeout
         sString = QString("%1").arg(iTimeout[iTeam], 1);
@@ -396,18 +400,6 @@ WaterpoloController::buildControls() {
     pPeriodEdit->setPalette(pal);
     pPeriodEdit->setReadOnly(true);
 
-    //Period buttons
-    pPeriodIncrement = new Button("", 0);
-    pPeriodIncrement->setIcon(plusButtonIcon);
-    pPeriodIncrement->setIconSize(plusPixmap.rect().size());
-    pPeriodDecrement = new Button("", 0);
-    pPeriodDecrement->setIcon(minusButtonIcon);
-    pPeriodDecrement->setIconSize(minusPixmap.rect().size());
-    if(iPeriod == 1)
-        pPeriodDecrement->setDisabled(true);
-    if(iPeriod == gsArgs.maxPeriods)
-        pPeriodIncrement->setDisabled(true);
-
     // Timeout
     pTimeoutLabel = new QLabel(tr("Timeout"));
     pTimeoutLabel->setAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
@@ -457,8 +449,6 @@ WaterpoloController::disableUi() {
     }
     pPeriodEdit->setDisabled(true);
     pTimeEdit->setDisabled(true);
-    pPeriodIncrement->setDisabled(true);
-    pPeriodDecrement->setDisabled(true);
 
     pNewPeriodButton->setDisabled(true);
     pChangeFieldButton->setDisabled(true);
@@ -484,8 +474,6 @@ WaterpoloController::enableUi() {
     }
     pPeriodEdit->setEnabled(true);
     pTimeEdit->setEnabled(true);
-    pPeriodIncrement->setEnabled(true);
-    pPeriodDecrement->setEnabled(true);
 
     pNewPeriodButton->setEnabled(true);
     pChangeFieldButton->setEnabled(true);
@@ -507,11 +495,6 @@ WaterpoloController::setEventHandlers() {
         connect(pScoreDecrement[iTeam], SIGNAL(buttonClicked(int)),
                 this, SLOT(onScoreDecrement(int)));
     }
-    // Period Buttons
-    connect(pPeriodIncrement, SIGNAL(buttonClicked(int)),
-            this, SLOT(onPeriodIncrement(int)));
-    connect(pPeriodDecrement, SIGNAL(buttonClicked(int)),
-            this, SLOT(onPeriodDecrement(int)));
     // Start/Stop Count
     connect(pCountStart, SIGNAL(buttonClicked(int)),
             this, SLOT(onCountStart(int)));
@@ -520,7 +503,9 @@ WaterpoloController::setEventHandlers() {
     // Time editing
     connect(pTimeEdit, SIGNAL(mousePressed()),
             this, SLOT(onGameTimeChanging()));
-    // New Game
+    // New Period
+    connect(pNewPeriodButton, SIGNAL(clicked(bool)),
+            this, SLOT(onButtonNewPeriodClicked()));
     // Exchange Field Position
     connect(pChangeFieldButton, SIGNAL(clicked(bool)),
             this, SLOT(onButtonChangeFieldClicked()));
@@ -559,29 +544,18 @@ WaterpoloController::onGameTimeChanging() {
 
 
 void
-WaterpoloController::onPeriodIncrement(int) {
+WaterpoloController::onButtonNewPeriodClicked() {
+    if(iPeriod == gsArgs.maxPeriods) {
+        QMessageBox::information(this, tr("WaterPolo_Controller"),
+                                 tr("Massimo Numero di periodi Raggiunto"));
+        return;
+    }
+    int iRes = QMessageBox::question(this, tr("WaterPolo_Controller"),
+                                     tr("Vuoi davvero iniziare un nuovo Periodo ?"),
+                                     QMessageBox::Yes | QMessageBox::No,
+                                     QMessageBox::No);
+    if(iRes != QMessageBox::Yes) return;
     iPeriod++;
-    if(iPeriod >= gsArgs.maxPeriods) {
-        pPeriodIncrement->setEnabled(false);
-    }
-    pPeriodDecrement->setEnabled(true);
-    QString sMessage = QString("<period>%1</period>")
-                           .arg(iPeriod);
-    QString sText = QString("%1").arg(iPeriod);
-    pPeriodEdit->setText(sText);
-    sText = QString("game/period");
-    pSettings->setValue(sText, iPeriod);
-    pPeriodEdit->setFocus(); // Per evitare che il focus vada altrove
-}
-
-
-void
-WaterpoloController::onPeriodDecrement(int) {
-    iPeriod--;
-    if(iPeriod == 1) {
-        pPeriodDecrement->setEnabled(false);
-    }
-    pPeriodIncrement->setEnabled(true);
     QString sMessage = QString("<period>%1</period>")
                            .arg(iPeriod);
     QString sText = QString("%1").arg(iPeriod);
@@ -682,6 +656,11 @@ WaterpoloController::processTextMessage(QString sMessage) {
     bool ok;
     int iVal;
     QString sNoData = QString("NoData");
+
+    sToken = XML_Parse(sMessage, "time");
+    if(sToken != sNoData){
+        pTimeEdit->setText(sToken);
+    }// time
 
     sToken = XML_Parse(sMessage, "team0");
     if(sToken != sNoData){
