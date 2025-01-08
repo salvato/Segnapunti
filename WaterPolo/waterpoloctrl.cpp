@@ -1000,6 +1000,7 @@ WaterPoloCtrl::startNewPeriod() {
                          .arg(iSeconds, 2, 10, QChar('0'));
     pTimeEdit->setText(sRemainingTime);
     sendAll();
+    btSendAll();
     SaveStatus();
 }
 

@@ -553,9 +553,8 @@ WaterpoloController::onButtonNewPeriodClicked() {
                                      QMessageBox::Yes | QMessageBox::No,
                                      QMessageBox::No);
     if(iRes != QMessageBox::Yes) return;
-    iPeriod++;
     QString sMessage = QString("<period>%1</period>")
-                           .arg(iPeriod);
+                           .arg(iPeriod+1);
     sendMessage(sMessage);
     pPeriodEdit->setFocus(); // Per evitare che il focus vada altrove
 }
