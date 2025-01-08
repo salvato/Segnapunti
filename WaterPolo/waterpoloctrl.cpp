@@ -1153,7 +1153,7 @@ WaterPoloCtrl::processBtMessage(QString sMessage) {
         exchangeField();
     }// Change Field
 
-    sToken = XML_Parse(sMessage, "newPeriod");
+    sToken = XML_Parse(sMessage, "period");
     if(sToken != sNoData) {
         startNewPeriod();
     }// Change Field
