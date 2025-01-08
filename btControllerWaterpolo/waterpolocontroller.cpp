@@ -528,9 +528,15 @@ WaterpoloController::onGameTimeChanging() {
     QString sTime = pTimeEdit->text();
     int minutes = sTime.left(1).toInt();
     int seconds = sTime.right(2).toInt();
-    QString sMessage = QString("<newTime>%1:%2</newTime>")
-                           .arg(minutes).arg(seconds);
-    sendMessage(sMessage);
+    pRemainingTimeDialog->setMinutes(minutes);
+    pRemainingTimeDialog->setSeconds(seconds);
+    if(pRemainingTimeDialog->exec() == QDialog::Accepted) {
+        minutes = pRemainingTimeDialog->getMinutes();
+        seconds = pRemainingTimeDialog->getSeconds();
+        QString sMessage = QString("<newTime>%1:%2</newTime>")
+                               .arg(minutes).arg(seconds);
+        sendMessage(sMessage);
+    }
     pCountStart->setFocus(); // Per evitare che il focus vada altrove
 }
 

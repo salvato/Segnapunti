@@ -666,6 +666,9 @@ WaterPoloCtrl::onGameTimeChanging() {
                                              .arg(seconds, 2, 10, QChar('0'));
                 pTimeEdit->setText(sRemainingTime);
                 pCountStart->setEnabled(true);
+                QString sMessage = QString("<time>%1</time>")
+                                       .arg(sRemainingTime);
+                pBtServer->sendMessage(sMessage);
             }
         }
     }
