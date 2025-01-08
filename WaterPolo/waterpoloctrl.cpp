@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QScreen>
 #include <QDateTime>
 #include <QDebug>
+#include <QRegularExpression>
 
 #include "../CommonFiles/btserver.h"
 #include "../CommonFiles/edit.h"
@@ -1153,6 +1154,25 @@ WaterPoloCtrl::processBtMessage(QString sMessage) {
         startNewPeriod();
     }// Change Field
 
+    sToken = XML_Parse(sMessage, "newTime");
+    if(sToken != sNoData) {
+        QRegularExpression rx("[:]");// match a colon
+        QStringList list = sToken.split(rx, Qt::SkipEmptyParts);
+        if(list.count() < 2) return;
+        int minutes = list[0].toInt();
+        int seconds = list[1].toInt();
+        qint64 mSecToGo = (minutes*60+seconds)*1000;
+        if(mSecToGo <= gsArgs.iTimeDuration*60000) {
+            runMilliSeconds = gsArgs.iTimeDuration * 60000-mSecToGo;
+            if(runMilliSeconds >= 0) {
+                QString sRemainingTime = QString("%1:%2")
+                .arg(minutes, 1)
+                    .arg(seconds, 2, 10, QChar('0'));
+                pTimeEdit->setText(sRemainingTime);
+                pCountStart->setEnabled(true);
+            }
+        }
+    }// Change Remaining Time
 }
 
 
