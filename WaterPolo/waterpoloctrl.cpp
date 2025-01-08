@@ -389,7 +389,6 @@ void
 WaterPoloCtrl::sendAll() {
     for(int i=0; i<2; i++) {
         pWaterPoloPanel->setTeam(i, pTeamName[i]->text());
-        // pWaterPoloPanel->setTimeout(i, iTimeout[i]);
         pWaterPoloPanel->setScore(i, iScore[i]);
     }
     pWaterPoloPanel->setLogo(0, gsArgs.sTeamLogoFilePath[0]);
@@ -426,7 +425,14 @@ WaterPoloCtrl::btSendAll() {
                        .arg(i,1);
         pBtServer->sendMessage(sMessage);
     }
-
+    // Time
+    sMessage = QString("<time>%1</time>").arg(pTimeEdit->text());
+    pBtServer->sendMessage(sMessage);
+    // Period
+    sMessage = QString("<period>%1</period>")
+                           .arg(pPeriodEdit->text(), 1);
+    pBtServer->sendMessage(sMessage);
+    // Slideshow/Video
     if(myStatus == showSlides)
         sMessage = QString("<slideshow>1</slideshow>");
     else if(myStatus == showSpots)
