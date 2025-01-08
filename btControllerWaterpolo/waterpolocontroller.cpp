@@ -725,5 +725,10 @@ WaterpoloController::processTextMessage(QString sMessage) {
         pScoreIncrement[1]->setEnabled((iVal != 99));
     }// score1
 
+    sToken = XML_Parse(sMessage, "newGame");
+    if(sToken != sNoData){
+        pCountStart->setEnabled(true);
+    }// score1
+
     BtScoreController::processGeneralMessages(sMessage);
 }

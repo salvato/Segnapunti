@@ -1044,6 +1044,8 @@ WaterPoloCtrl::onButtonNewGameClicked() {
     pTimeEdit->setText(sRemainingTime);
     sendAll();
     SaveStatus();
+    sText = QString("<newGame>0</newGame>");
+    pBtServer->sendMessage(sText);
 }
 
 
