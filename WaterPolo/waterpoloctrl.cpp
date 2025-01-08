@@ -796,7 +796,7 @@ WaterPoloCtrl::onCountStart(int iTeam) {
     pCountStop->setEnabled(true);
     disableUi();
     QString sMessage = QString("startT%1/startT").arg(0, 1);
-    pTimeoutEdit[iTeam]->setText(sMessage);
+    pBtServer->sendMessage(sMessage);
 }
 
 
@@ -810,7 +810,7 @@ WaterPoloCtrl::onCountStop(int iTeam) {
     pTimeEdit->setEnabled(true);
     enableUi();
     QString sMessage = QString("stopT%1/stopT").arg(0, 1);
-    pTimeoutEdit[iTeam]->setText(sMessage);
+    pBtServer->sendMessage(sMessage);
 }
 
 
