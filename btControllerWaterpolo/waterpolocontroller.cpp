@@ -653,10 +653,10 @@ WaterpoloController::processTextMessage(QString sMessage) {
     sToken = XML_Parse(sMessage, "time");
     if(sToken != sNoData){
         pTimeEdit->setText(sToken);
-        pCountStop->setDisabled(true);
         if(sToken==QString("0:00")) {
             enableUi();
             pCountStart->setDisabled(true);
+            pCountStop->setDisabled(true);
         }
     }// remaining time
 
@@ -673,6 +673,17 @@ WaterpoloController::processTextMessage(QString sMessage) {
         pCountStop->setDisabled(true);
         enableUi();
     }// start time
+
+    sToken = XML_Parse(sMessage, "startTime");
+    if(sToken != sNoData){
+        pTimeEdit->setText(sToken);
+        pCountStart->setEnabled(true);
+        pCountStop->setDisabled(true);
+        if(sToken==QString("0:00")) {
+            enableUi();
+            pCountStart->setDisabled(true);
+        }
+    }// starting time
 
     sToken = XML_Parse(sMessage, "period");
     if(sToken != sNoData){

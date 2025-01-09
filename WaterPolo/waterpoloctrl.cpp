@@ -429,6 +429,8 @@ WaterPoloCtrl::btSendAll() {
     // Time
     sMessage = QString("<time>%1</time>").arg(pTimeEdit->text());
     pBtServer->sendMessage(sMessage);
+    sMessage = QString("<startTime>%1</startTime>").arg(pTimeEdit->text());
+    pBtServer->sendMessage(sMessage);
     // Period
     sMessage = QString("<period>%1</period>")
                            .arg(pPeriodEdit->text(), 1);
