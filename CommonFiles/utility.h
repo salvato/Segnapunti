@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#define LOG_MESG
 //#define LOG_VERBOSE
 //#define LOG_VERBOSE_VERBOSE
-#define BT_DEBUG
+//#define BT_DEBUG
 
 #define START_GRADIENT   8
 #define END_GRADIENT   128
