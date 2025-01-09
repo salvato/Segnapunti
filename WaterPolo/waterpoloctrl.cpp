@@ -49,7 +49,7 @@ WaterPoloCtrl::WaterPoloCtrl(QFile *myLogFile, QWidget *parent)
     , lastM(-1)
     , lastS(-1)
 {
-    setWindowTitle("Score Controller - © Gabriele Salvato (2025)");
+    setWindowTitle("Waterpolo Controller - © Gabriele Salvato (2025)");
     setWindowIcon(QIcon(":/../CommonFiles/Loghi/Logo.ico"));
 
     panelPalette = QWidget::palette();

@@ -2,6 +2,7 @@
 
 #include <QtBluetooth/qbluetoothserver.h>
 #include <QtBluetooth/qbluetoothsocket.h>
+#include "../CommonFiles/utility.h"
 
 using namespace Qt::StringLiterals;
 
@@ -113,6 +114,10 @@ BtServer::sendMessage(const QString &message) {
         return;
     QByteArray text = message.toUtf8() + '\n';
     pClientSocket->write(text);
+#ifdef BT_DEBUG
+    qCritical() << __FUNCTION__ << __LINE__;
+    qCritical() << "Sent:" << text;
+#endif
 }
 
 
@@ -129,7 +134,10 @@ BtServer::clientConnected() {
             this, QOverload<>::of(&BtServer::clientDisconnected));
 
     sClientName = pClientSocket->peerName();
-    // qDebug() << sClientName << "Connectd !";
+#ifdef BT_DEBUG
+    qCritical() << __FUNCTION__ << __LINE__;
+    qCritical()  << sClientName << "Connected !";
+#endif
     emit clientConnected(pClientSocket->peerName());
 }
 
@@ -141,6 +149,10 @@ BtServer::clientDisconnected() {
     if (!socket)
         return;
 
+#ifdef BT_DEBUG
+    qCritical() << __FUNCTION__ << __LINE__;
+    qCritical()  << sClientName << "Disconnected !";
+#endif
     emit clientDisconnected(sClientName);
 
     pClientSocket = nullptr;
@@ -163,6 +175,10 @@ BtServer::readSocket() {
         QByteArray line = socket->readLine().trimmed();
         emit messageReceived(sClientName,
                              QString::fromUtf8(line.constData(), line.length()));
+#ifdef BT_DEBUG
+        qCritical() << __FUNCTION__ << __LINE__;
+        qCritical()  << line << "Received !";
+#endif
     }
 }
 

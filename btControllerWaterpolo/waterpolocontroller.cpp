@@ -645,15 +645,20 @@ WaterpoloController::processTextMessage(QString sMessage) {
     int iVal;
     QString sNoData = QString("NoData");
 
+#ifdef BT_DEBUG
+    qCritical() << __FUNCTION__ << __LINE__;
+    qCritical() << "Received to:" << sMessage;
+#endif
+
     sToken = XML_Parse(sMessage, "time");
     if(sToken != sNoData){
         pTimeEdit->setText(sToken);
+        pCountStop->setDisabled(true);
         if(sToken==QString("0:00")) {
             enableUi();
             pCountStart->setDisabled(true);
-            pCountStop->setDisabled(true);
         }
-    }// time
+    }// remaining time
 
     sToken = XML_Parse(sMessage, "startT");
     if(sToken != sNoData){

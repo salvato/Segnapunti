@@ -208,7 +208,9 @@ BtScoreController::sendMessage(const QString& sMessage) {
 
 void
 BtScoreController::try2ConnectBt() {
-    // qCritical() << __FUNCTION__ << __LINE__;
+#ifdef BT_DEBUG
+    qCritical() << __FUNCTION__ << __LINE__;
+#endif
     if(pTempClient) {
         pTempClient->disconnect();
         pTempClient->deleteLater();
@@ -217,8 +219,10 @@ BtScoreController::try2ConnectBt() {
     QBluetoothServiceInfo serviceInfo;
     QBluetoothAddress address(pSettings->value("ServerAddress", "").toString());
     QBluetoothUuid uuid(pSettings->value("ServerUUID", "").toString());
-    // qCritical() << "BtAddress:" << address.toString();
-    // qCritical() << "BtUUID   :" << uuid.toString();
+#ifdef BT_DEBUG
+    qCritical() << "BtAddress:" << address.toString();
+    qCritical() << "BtUUID   :" << uuid.toString();
+#endif
     if((!address.isNull()) && (!uuid.isNull())) {
         pTempClient = new BtClient(this);
         pTempClient->startClient(address, uuid);
@@ -307,18 +311,24 @@ BtScoreController::onOffButtonClicked() {
 
 void
 BtScoreController::startBtDiscovery(const QBluetoothUuid &uuid) {
-    // qCritical() << __FUNCTION__ << __LINE__;
+#ifdef BT_DEBUG
+    qCritical() << __FUNCTION__ << __LINE__;
+#endif
     if (pBtDiscoveryAgent->isActive())
         pBtDiscoveryAgent->stop();
     pBtDiscoveryAgent->setUuidFilter(uuid);
     pBtDiscoveryAgent->start(QBluetoothServiceDiscoveryAgent::FullDiscovery);
-    // qCritical() << "Bluetooth Discovery Started";
+#ifdef BT_DEBUG
+    qCritical() << "Bluetooth Discovery Started";
+#endif
 }
 
 
 void
 BtScoreController::stopBtDiscovery() {
-    // qCritical() << __FUNCTION__ << __LINE__;
+#ifdef BT_DEBUG
+    qCritical() << __FUNCTION__ << __LINE__;
+#endif
     if (pBtDiscoveryAgent) {
         pBtDiscoveryAgent->stop();
     }
@@ -327,7 +337,9 @@ BtScoreController::stopBtDiscovery() {
 
 void
 BtScoreController::serviceDiscovered(const QBluetoothServiceInfo &serviceInfo) {
-    // qCritical() << __FUNCTION__ << __LINE__;
+#ifdef BT_DEBUG
+    qCritical() << __FUNCTION__ << __LINE__;
+#endif
     pSettings->setValue("ServerAddress", serviceInfo.device().address().toString());
     pSettings->setValue("ServerUUID", serviceInfo.serviceUuid().toString());
 
@@ -350,7 +362,9 @@ BtScoreController::serviceDiscovered(const QBluetoothServiceInfo &serviceInfo) {
 
 void
 BtScoreController::discoveryFinished() {
-    // qCritical() << __FUNCTION__ << __LINE__;
+#ifdef BT_DEBUG
+    qCritical() << __FUNCTION__ << __LINE__;
+#endif
     if(!pPanelClient)
         try2ConnectBt();
 }
@@ -373,7 +387,10 @@ void
 BtScoreController::processGeneralMessages(QString sMessage) {
     QString sToken;
     QString sNoData = QString("NoData");
-
+#ifdef BT_DEBUG
+    qCritical() << __FUNCTION__ << __LINE__;
+    qCritical() << sMessage;
+#endif
     sToken = XML_Parse(sMessage, "startSpotLoop");
     if(sToken != sNoData) {
         QPixmap pixmap(":/CommonFiles/ButtonIcons/sign_stop.png");
@@ -422,7 +439,10 @@ BtScoreController::processGeneralMessages(QString sMessage) {
 
 void
 BtScoreController::onPanelClientConnected(QString sName) {
-    // qCritical() << __FUNCTION__ << __LINE__;
+#ifdef BT_DEBUG
+    qCritical() << __FUNCTION__ << __LINE__;
+    qCritical() << "Connected to" << sName;
+#endif
     Q_UNUSED(sName)
     pPanelClient = pTempClient;
     stopBtDiscovery();
@@ -438,7 +458,9 @@ BtScoreController::onPanelClientConnected(QString sName) {
 
 void
 BtScoreController::onPanelClientDisconnected() {
-    // qCritical() << __FUNCTION__ << __LINE__;
+#ifdef BT_DEBUG
+    qCritical() << __FUNCTION__ << __LINE__;
+#endif
     setDisabled(true);
     if(pPanelClient) {
         pPanelClient->disconnect();
@@ -451,7 +473,9 @@ BtScoreController::onPanelClientDisconnected() {
 
 void
 BtScoreController::onPanelClientSocketError(QString sError) {
-    // qCritical() << __FUNCTION__ << __LINE__;
+#ifdef BT_DEBUG
+    qCritical() << __FUNCTION__ << __LINE__;
+#endif
     Q_UNUSED(sError)
     setDisabled(true);
     if(pPanelClient) {

@@ -2,6 +2,7 @@
 
 #include <QtCore/qmetaobject.h>
 #include <QtBluetooth/qbluetoothserviceinfo.h>
+#include "utility.h"
 
 using namespace  Qt::StringLiterals;
 
@@ -41,7 +42,9 @@ void
 BtClient::startClient(const QBluetoothServiceInfo &remoteService) {
     if (pSocket)
         return;
-
+#ifdef BT_DEBUG
+    qCritical() << __FUNCTION__ << __LINE__;
+#endif
     // Connect to service
     pSocket = new QBluetoothSocket(QBluetoothServiceInfo::RfcommProtocol);
     // qDebug() << "Create socket";
@@ -73,7 +76,10 @@ BtClient::readSocket() {
 
     while (pSocket->canReadLine()) {
         QByteArray line = pSocket->readLine().trimmed();
-        // qDebug() << "Received:" << line;
+#ifdef BT_DEBUG
+        qCritical() << __FUNCTION__ << __LINE__;
+        qCritical() << "Received:" << line;
+#endif
         emit messageReceived(pSocket->peerName(),
                              QString::fromUtf8(line.constData(), line.length()));
     }
@@ -84,6 +90,10 @@ void
 BtClient::sendMessage(const QString &message) {
     QByteArray text = message.toUtf8() + '\n';
     pSocket->write(text);
+#ifdef BT_DEBUG
+    qCritical() << __FUNCTION__ << __LINE__;
+    qCritical() << "Sent:" << text;
+#endif
 }
 
 
@@ -95,12 +105,19 @@ BtClient::onSocketErrorOccurred(QBluetoothSocket::SocketError error) {
     QMetaEnum metaEnum = QMetaEnum::fromType<QBluetoothSocket::SocketError>();
     QString errorString = pSocket->peerName() + ' '_L1
                           + metaEnum.valueToKey(static_cast<int>(error)) + " occurred"_L1;
-    // qCritical() << __FUNCTION__ << __LINE__ << errorString;
+#ifdef BT_DEBUG
+    qCritical() << __FUNCTION__ << __LINE__;
+    qCritical() << "Error:" << errorString;
+#endif
     emit socketErrorOccurred(errorString);
 }
 
 
 void
 BtClient::connected() {
+#ifdef BT_DEBUG
+    qCritical() << __FUNCTION__ << __LINE__;
+    qCritical() << "Connected to:" << pSocket->peerName();
+#endif
     emit connected(pSocket->peerName());
 }
