@@ -45,7 +45,7 @@ private slots:
 
 protected:
     void            initBluetooth();
-    void            try2ConnectBt();
+    void            tryPaired();
     bool            prepareLogFile();
     QHBoxLayout*    CreateSpotButtons();
     void            connectButtonSignals();
@@ -58,6 +58,7 @@ protected:
     void            processGeneralMessages(QString sMessage);
     void            disableGeneralButtons();
     void            enableGeneralButtons();
+    void            tryConnectLastKnown(QBluetoothAddress address);
 #ifdef Q_OS_ANDROID
     bool checkException(const char* method, const QJniObject* obj);
 #endif
@@ -79,7 +80,6 @@ protected:
         showCamera
     };
     status             myStatus;
-    BtClient*          pTempClient;
     BtClient*          pPanelClient;
     QString            sLocalName;
     QList<QBluetoothHostInfo> localAdapters;

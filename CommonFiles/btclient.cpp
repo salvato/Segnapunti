@@ -40,7 +40,7 @@ BtClient::startClient(const QBluetoothAddress& address, const QBluetoothUuid uui
 
 void
 BtClient::startClient(const QBluetoothServiceInfo &remoteService) {
-    if (pSocket)
+    if(pSocket)
         return;
 #ifdef BT_DEBUG
     qCritical() << __FUNCTION__ << __LINE__;
@@ -50,6 +50,9 @@ BtClient::startClient(const QBluetoothServiceInfo &remoteService) {
     // qDebug() << "Create socket";
     pSocket->connectToService(remoteService);
     // qDebug() << "ConnectToService done";
+#ifdef BT_DEBUG
+    qCritical() << "Socket State:" << pSocket->state();
+#endif
 
     connect(pSocket, &QBluetoothSocket::readyRead,
             this, &BtClient::readSocket);

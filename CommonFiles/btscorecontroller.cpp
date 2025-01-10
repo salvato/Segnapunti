@@ -26,17 +26,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifdef Q_OS_ANDROID
 #include <QJniObject>
 #endif
-#if defined Q_OS_LINUX
-#include <QRegularExpression>
-#endif
 
-/////////////////////////////////////////////////////////
-// In Android pare non funzionare il pBtDiscoveryAgent //
-/////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////
+// In Android pare non funzionare il QBluetoothServiceDiscoveryAgent //
+///////////////////////////////////////////////////////////////////////
 
 
 #include "btscorecontroller.h"
-#include "../CommonFiles/utility.h"
+#include "utility.h"
 #include "btclient.h"
 
 #if QT_FEATURE_permissions
@@ -54,7 +52,6 @@ BtScoreController::BtScoreController(QFile *myLogFile, QWidget *parent)
     : QMainWindow(parent)
     , pLogFile(myLogFile)
     , pSettings(new QSettings("Gabriele Salvato", "Score Controller"))
-    , pTempClient(nullptr)
     , pPanelClient(nullptr)
     , pBtDiscoveryAgent(nullptr)
     , pAdapter(nullptr)
@@ -69,10 +66,11 @@ BtScoreController::BtScoreController(QFile *myLogFile, QWidget *parent)
 
     initBluetooth();
 
+    currentDevice = -1;
 #ifdef Q_OS_ANDROID
-    pairedDevices = getBluetoothDevicesAdress();
+    pairedDevices.append(getBluetoothDevicesAdress());
 #elif defined Q_OS_LINUX
-    pairedDevices = getBluetoothDevicesAdress();
+    pairedDevices.append(getBluetoothDevicesAdress());
 #endif
 
 #ifdef BT_DEBUG
@@ -80,8 +78,23 @@ BtScoreController::BtScoreController(QFile *myLogFile, QWidget *parent)
     for(int i=0; i<pairedDevices.count(); i++)
         qCritical() << "Paired Device:" << pairedDevices.at(i);
 #endif
-    currentDevice = 0;
-    try2ConnectBt();
+
+    // Let's try first the saved address (if any)
+    QBluetoothAddress address(QBluetoothAddress(pSettings->value("ServerAddress", "").toString()));
+    if(!address.isNull()) {
+        tryConnectLastKnown(address);
+    }
+    else { // else We will try to either:
+           //   connect to Paired devices (LINUX or ANDROID)
+           //   or using QBluetoothServiceDiscoveryAgent (WINDOWS)
+#ifdef Q_OS_ANDROID
+        tryPaired();
+#elif defined Q_OS_LINUX
+        tryPaired();
+#else
+        startBtDiscovery(QBluetoothUuid(serviceUuid));
+#endif
+    }
 
     setDisabled(true);
     myStatus = showPanel;
@@ -153,7 +166,6 @@ BtScoreController::getBluetoothDevicesAdress() {
     else {
         // Parse the output, example: HC-06 (20:13:11:15:16:08)
         QByteArray output=command.readAllStandardOutput();
-        // QRegularExpression regexp("(.*) \\((.*)\\)");
         foreach(QByteArray line, output.split('\n')) {
             QList<QByteArray> elements =line.split(' ');
              if (elements.count() > 1) {
@@ -318,39 +330,80 @@ BtScoreController::sendMessage(const QString& sMessage) {
 
 
 void
+BtScoreController::tryConnectLastKnown(QBluetoothAddress address) {
+    QBluetoothUuid uuid(serviceUuid);
+#ifdef BT_DEBUG
+    qCritical() << __FUNCTION__ << __LINE__;
+    qCritical() << "BtAddress:" << address.toString();
+    qCritical() << "BtUUID   :" << uuid.toString();
+#endif
+    pPanelClient = new BtClient(this);
+    pPanelClient->startClient(address, uuid);
+    connect(pPanelClient, SIGNAL(connected(QString)),
+            this, SLOT(onPanelClientConnected(QString)));
+    connect(pPanelClient, SIGNAL(socketErrorOccurred(QString)),
+            this, SLOT(onPanelClientSocketError(QString)));
+}
+
+
+void
+BtScoreController::tryPaired() {
+#ifdef BT_DEBUG
+    qCritical() << __FUNCTION__ << __LINE__;
+#endif
+    if(pPanelClient) {
+        pPanelClient->disconnect();
+        pPanelClient->deleteLater();
+        pPanelClient = nullptr;
+    }
+    currentDevice = (currentDevice+1) % pairedDevices.count();
+    QBluetoothServiceInfo serviceInfo;
+    QBluetoothAddress address(pairedDevices.at(currentDevice));
+    QBluetoothUuid uuid(serviceUuid);
+    pPanelClient = new BtClient(this);
+    pPanelClient->startClient(address, uuid);
+    connect(pPanelClient, SIGNAL(connected(QString)),
+            this, SLOT(onPanelClientConnected(QString)));
+    connect(pPanelClient, SIGNAL(socketErrorOccurred(QString)),
+            this, SLOT(onPanelClientSocketError(QString)));
+}
+
+
+/*
+void
 BtScoreController::try2ConnectBt() {
 #ifdef BT_DEBUG
     qCritical() << __FUNCTION__ << __LINE__;
 #endif
-    if(pTempClient) {
-        pTempClient->disconnect();
-        pTempClient->deleteLater();
-        pTempClient = nullptr;
+    if(pPanelClient) {
+        pPanelClient->disconnect();
+        pPanelClient->deleteLater();
+        pPanelClient = nullptr;
     }
-    QBluetoothServiceInfo serviceInfo;
-    QBluetoothAddress address;
-    if(!pairedDevices.isEmpty())
-        address = QBluetoothAddress(pairedDevices.at(currentDevice));
-    else
-        address = QBluetoothAddress(pSettings->value("ServerAddress", "").toString());
-    QBluetoothUuid uuid(serviceUuid);
-#ifdef BT_DEBUG
-    qCritical() << "BtAddress:" << address.toString();
-    qCritical() << "BtUUID   :" << uuid.toString();
-#endif
-    if((!address.isNull()) && (!uuid.isNull())) {
-        pTempClient = new BtClient(this);
-        pTempClient->startClient(address, uuid);
-        connect(pTempClient, SIGNAL(connected(QString)),
-                this, SLOT(onPanelClientConnected(QString)));
-        if(!pairedDevices.isEmpty()) {
-            connect(pTempClient, SIGNAL(socketErrorOccurred(QString)),
-                    this, SLOT(onPanelClientSocketError(QString)));
-        }
-    }
+    // QBluetoothServiceInfo serviceInfo;
+    // QBluetoothAddress address;
+    // if(!pairedDevices.isEmpty())
+    //     address = QBluetoothAddress(pairedDevices.at(currentDevice));
+    // else
+    //     address = QBluetoothAddress(pSettings->value("ServerAddress", "").toString());
+    // QBluetoothUuid uuid(serviceUuid);
+// #ifdef BT_DEBUG
+//     qCritical() << "BtAddress:" << address.toString();
+//     qCritical() << "BtUUID   :" << uuid.toString();
+// #endif
+    // if((!address.isNull()) && (!uuid.isNull())) {
+    //     pTempClient = new BtClient(this);
+    //     pTempClient->startClient(address, uuid);
+    //     connect(pTempClient, SIGNAL(connected(QString)),
+    //             this, SLOT(onPanelClientConnected(QString)));
+    //     if(!pairedDevices.isEmpty()) {
+    //         connect(pTempClient, SIGNAL(socketErrorOccurred(QString)),
+    //                 this, SLOT(onPanelClientSocketError(QString)));
+    //     }
+    // }
     startBtDiscovery(QBluetoothUuid(serviceUuid));
 }
-
+*/
 
 void
 BtScoreController::SaveStatus() {
@@ -430,16 +483,14 @@ BtScoreController::onOffButtonClicked() {
 
 void
 BtScoreController::startBtDiscovery(const QBluetoothUuid &uuid) {
-    if(!pairedDevices.isEmpty()) {
-        if (pBtDiscoveryAgent->isActive())
-            pBtDiscoveryAgent->stop();
-        pBtDiscoveryAgent->setUuidFilter(uuid);
-        pBtDiscoveryAgent->start(QBluetoothServiceDiscoveryAgent::FullDiscovery);
+    if (pBtDiscoveryAgent->isActive())
+        pBtDiscoveryAgent->stop();
+    pBtDiscoveryAgent->setUuidFilter(uuid);
+    pBtDiscoveryAgent->start(QBluetoothServiceDiscoveryAgent::FullDiscovery);
 #ifdef BT_DEBUG
-        qCritical() << __FUNCTION__ << __LINE__;
-        qCritical() << "Bluetooth Discovery Started";
+    qCritical() << __FUNCTION__ << __LINE__;
+    qCritical() << "Bluetooth Discovery Started";
 #endif
-    }
 }
 
 
@@ -461,6 +512,8 @@ BtScoreController::serviceDiscovered(const QBluetoothServiceInfo &serviceInfo) {
     qCritical() << "ServerAddress" << serviceInfo.device().address().toString();
     qCritical() << "ServerUUID" << serviceInfo.serviceUuid().toString();
 #endif
+    pBtDiscoveryAgent->disconnect();
+    pBtDiscoveryAgent->stop();
     pSettings->setValue("ServerAddress", serviceInfo.device().address().toString());
     pSettings->setValue("ServerUUID", serviceInfo.serviceUuid().toString());
     const QBluetoothAddress address = serviceInfo.device().address();
@@ -469,14 +522,14 @@ BtScoreController::serviceDiscovered(const QBluetoothServiceInfo &serviceInfo) {
         remoteName = address.toString();
     else
         remoteName = serviceInfo.device().name();
-    if(pTempClient) {
-        pTempClient->disconnect();
-        delete pTempClient;
+    if(pPanelClient) {
+        pPanelClient->disconnect();
+        delete pPanelClient;
     }
-    pTempClient = new BtClient(this);
-    pTempClient->startClient(serviceInfo);
-    connect(pTempClient, SIGNAL(connected(QString)),
+    pPanelClient = new BtClient(this);
+    connect(pPanelClient, SIGNAL(connected(QString)),
             this, SLOT(onPanelClientConnected(QString)));
+    pPanelClient->startClient(serviceInfo);
 }
 
 
@@ -487,7 +540,7 @@ BtScoreController::discoveryFinished() {
     qCritical() << "Error:" << pBtDiscoveryAgent->errorString();
 #endif
     if(!pPanelClient)
-        try2ConnectBt();
+        startBtDiscovery(QBluetoothUuid(serviceUuid));
 }
 
 
@@ -565,7 +618,6 @@ BtScoreController::onPanelClientConnected(QString sName) {
     qCritical() << "Connected to" << sName;
 #endif
     Q_UNUSED(sName)
-    pPanelClient = pTempClient;
     stopBtDiscovery();
     setEnabled(true);
     connect(pPanelClient, SIGNAL(disconnected()),
@@ -588,7 +640,13 @@ BtScoreController::onPanelClientDisconnected() {
         pPanelClient->deleteLater();
         pPanelClient = nullptr;
     }
-    try2ConnectBt();
+#ifdef Q_OS_ANDROID
+    tryPaired();
+#elif defined Q_OS_LINUX
+    tryPaired();
+#else
+    startBtDiscovery(QBluetoothUuid(serviceUuid));
+#endif
 }
 
 
@@ -604,7 +662,11 @@ BtScoreController::onPanelClientSocketError(QString sError) {
         pPanelClient->deleteLater();
         pPanelClient = nullptr;
     }
-    if(!pairedDevices.isEmpty())
-        currentDevice = (currentDevice+1) % pairedDevices.count();
-    try2ConnectBt();
+#ifdef Q_OS_ANDROID
+    tryPaired();
+#elif defined Q_OS_LINUX
+    tryPaired();
+#else
+    startBtDiscovery(QBluetoothUuid(serviceUuid));
+#endif
 }
