@@ -5,6 +5,9 @@
 #include <QFile>
 #include <QSettings>
 #include <QTimer>
+#ifdef Q_OS_ANDROID
+#include <QJniObject>
+#endif
 
 #include "generalsetuparguments.h"
 
@@ -55,6 +58,10 @@ protected:
     void            processGeneralMessages(QString sMessage);
     void            disableGeneralButtons();
     void            enableGeneralButtons();
+#ifdef Q_OS_ANDROID
+    bool checkException(const char* method, const QJniObject* obj);
+#endif
+    QStringList     getBluetoothDevicesAdress();
 
 protected:
     GeneralSetupArguments gsArgs;
@@ -81,4 +88,6 @@ protected:
 
 private:
     QBluetoothServiceInfo service;
+    QStringList pairedDevices;
+    int currentDevice;
 };
