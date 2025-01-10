@@ -26,6 +26,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifdef Q_OS_ANDROID
 #include <QJniObject>
 #endif
+#if defined Q_OS_LINUX
+#include <QRegularExpression>
+#endif
 
 /////////////////////////////////////////////////////////
 // In Android pare non funzionare il pBtDiscoveryAgent //
@@ -68,6 +71,8 @@ BtScoreController::BtScoreController(QFile *myLogFile, QWidget *parent)
 
 #ifdef Q_OS_ANDROID
     pairedDevices = getBluetoothDevicesAdress();
+#elif defined Q_OS_LINUX
+    pairedDevices = getBluetoothDevicesAdress();
 #endif
 
 #ifdef BT_DEBUG
@@ -100,9 +105,9 @@ BtScoreController::~BtScoreController() {
 QStringList
 BtScoreController::getBluetoothDevicesAdress() {
     QStringList result;
-#ifdef Q_OS_ANDROID
     // QString fmt("%1 %2");
     QString fmt("%1");
+#ifdef Q_OS_ANDROID
     // Query via Android Java API.
     QJniObject adapter = QJniObject::callStaticObjectMethod("android/bluetooth/BluetoothAdapter",
                                                             "getDefaultAdapter",
@@ -138,20 +143,24 @@ BtScoreController::getBluetoothDevicesAdress() {
         }
     }
 #elif defined Q_OS_LINUX
-    // Query via the Linux command bt-device.
+    // Query via the Linux command bluetoothctl devices.
     QProcess command;
-    command.start("bt-device -l");
+    command.start("/usr/bin/bluetoothctl",  QStringList("devices"));
     command.waitForFinished(3000);
     if (command.error()==QProcess::FailedToStart) {
-        qWarning("Cannot execute the command 'bt-device': %s",qPrintable(command.errorString()));
+        qWarning("Cannot execute the command '/usr/bin/bluetoothctl': %s",qPrintable(command.errorString()));
     }
     else {
         // Parse the output, example: HC-06 (20:13:11:15:16:08)
         QByteArray output=command.readAllStandardOutput();
-        QRegExp regexp("(.*) \\((.*)\\)");
+        // QRegularExpression regexp("(.*) \\((.*)\\)");
         foreach(QByteArray line, output.split('\n')) {
-            if (regexp.indexIn(line)>=0) {
-                result.append(fmt.arg(regexp.cap(2)).arg(regexp.cap(1)));
+            QList<QByteArray> elements =line.split(' ');
+             if (elements.count() > 1) {
+                result.append(fmt.arg(elements.at(1)));
+#ifdef BT_DEBUG
+                qCritical() << elements.at(1) << elements.at(2);
+#endif
             }
         }
     }
@@ -421,19 +430,16 @@ BtScoreController::onOffButtonClicked() {
 
 void
 BtScoreController::startBtDiscovery(const QBluetoothUuid &uuid) {
-    (void)uuid;
-#ifndef Q_OS_ANDROID
+    if(!pairedDevices.isEmpty()) {
+        if (pBtDiscoveryAgent->isActive())
+            pBtDiscoveryAgent->stop();
+        pBtDiscoveryAgent->setUuidFilter(uuid);
+        pBtDiscoveryAgent->start(QBluetoothServiceDiscoveryAgent::FullDiscovery);
 #ifdef BT_DEBUG
-    qCritical() << __FUNCTION__ << __LINE__;
+        qCritical() << __FUNCTION__ << __LINE__;
+        qCritical() << "Bluetooth Discovery Started";
 #endif
-    if (pBtDiscoveryAgent->isActive())
-        pBtDiscoveryAgent->stop();
-    pBtDiscoveryAgent->setUuidFilter(uuid);
-    pBtDiscoveryAgent->start(QBluetoothServiceDiscoveryAgent::FullDiscovery);
-#ifdef BT_DEBUG
-    qCritical() << "Bluetooth Discovery Started";
-#endif
-#endif
+    }
 }
 
 
