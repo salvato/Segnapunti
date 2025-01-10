@@ -516,7 +516,7 @@ BtScoreController::serviceDiscovered(const QBluetoothServiceInfo &serviceInfo) {
     pBtDiscoveryAgent->stop();
     pSettings->setValue("ServerAddress", serviceInfo.device().address().toString());
     pSettings->setValue("ServerUUID", serviceInfo.serviceUuid().toString());
-    const QBluetoothAddress address = serviceInfo.device().address();
+    QBluetoothAddress address(serviceInfo.device().address());
     QString remoteName;
     if (serviceInfo.device().name().isEmpty())
         remoteName = address.toString();
@@ -529,7 +529,7 @@ BtScoreController::serviceDiscovered(const QBluetoothServiceInfo &serviceInfo) {
     pPanelClient = new BtClient(this);
     connect(pPanelClient, SIGNAL(connected(QString)),
             this, SLOT(onPanelClientConnected(QString)));
-    pPanelClient->startClient(serviceInfo);
+    pPanelClient->startClient(address, QBluetoothUuid(serviceUuid));
 }
 
 
