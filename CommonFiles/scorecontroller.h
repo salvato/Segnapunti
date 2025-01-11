@@ -28,6 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QBluetoothHostInfo>
 
 #include "generalsetuparguments.h"
+#include "utility.h"
 
 
 QT_FORWARD_DECLARE_CLASS(QHBoxLayout)
@@ -94,12 +95,6 @@ protected:
     QPushButton*          pGeneralSetupButton{};
     QPushButton*          pShutdownButton{};
     QHBoxLayout*          pSpotButtonsLayout;
-    enum status {
-        showPanel,
-        showSpots,
-        showSlides,
-        showCamera
-    };
     status          myStatus;
     QProcess*       pVideoPlayer;
     QString         sProcess;
