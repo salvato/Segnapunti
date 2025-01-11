@@ -575,6 +575,7 @@ WaterpoloController::onTimeOutIncrement(int iTeam) {
     QString sText = QString("<inctimeout>%1</inctimeout>")
                         .arg(iTeam,1);
     sendMessage(sText);
+    pTimeoutDecrement[iTeam]->setFocus(); // Per evitare che il focus vada altrove
 }
 
 
@@ -583,6 +584,7 @@ WaterpoloController::onTimeOutDecrement(int iTeam) {
     QString sText = QString("<dectimeout>%1</dectimeout>")
                         .arg(iTeam,1);
     sendMessage(sText);
+    pTimeoutIncrement[iTeam]->setFocus(); // Per evitare che il focus vada altrove
 }
 
 
@@ -592,6 +594,7 @@ WaterpoloController::onCountStart(int iTeam) {
     QString sText = QString("<startT>%1</startT>")
                         .arg(1,1);
     sendMessage(sText);
+    pCountStop->setFocus(); // Per evitare che il focus vada altrove
 }
 
 
@@ -601,6 +604,7 @@ WaterpoloController::onCountStop(int iTeam) {
     QString sText = QString("<stopT>%1</stopT>")
                         .arg(1,1);
     sendMessage(sText);
+    pCountStart->setFocus(); // Per evitare che il focus vada altrove
 }
 
 
@@ -609,6 +613,7 @@ WaterpoloController::onScoreIncrement(int iTeam) {
     QString sText = QString("<incscore>%1</incscore>")
                     .arg(iTeam,1);
     sendMessage(sText);
+    pCountStart->setFocus(); // Per evitare che il focus vada altrove
 }
 
 
@@ -617,6 +622,7 @@ WaterpoloController::onScoreDecrement(int iTeam) {
     QString sText = QString("<decscore>%1</decscore>")
                         .arg(iTeam,1);
     sendMessage(sText);
+    pCountStart->setFocus(); // Per evitare che il focus vada altrove
 }
 
 
@@ -667,6 +673,10 @@ WaterpoloController::processTextMessage(QString sMessage) {
             enableUi();
             pCountStart->setDisabled(true);
             pCountStop->setDisabled(true);
+            pNewPeriodButton->setFocus();
+        }
+        else {
+            pCountStop->setFocus();
         }
     }// remaining time
 
@@ -675,6 +685,7 @@ WaterpoloController::processTextMessage(QString sMessage) {
         pCountStart->setDisabled(true);
         pCountStop->setEnabled(true);
         disableUi();
+        pCountStop->setFocus();
     }// start time
 
     sToken = XML_Parse(sMessage, "stopT");
@@ -682,6 +693,7 @@ WaterpoloController::processTextMessage(QString sMessage) {
         pCountStart->setEnabled(true);
         pCountStop->setDisabled(true);
         enableUi();
+        pCountStart->setFocus();
     }// start time
 
     sToken = XML_Parse(sMessage, "startTime");
@@ -693,12 +705,17 @@ WaterpoloController::processTextMessage(QString sMessage) {
             enableUi();
             pCountStart->setDisabled(true);
         }
+        pCountStart->setFocus(); // Per evitare che il focus vada altrove
     }// starting time
 
     sToken = XML_Parse(sMessage, "period");
     if(sToken != sNoData){
         pPeriodEdit->setText(sToken);
         iPeriod = sToken.toInt();
+        if(iPeriod >= gsArgs.maxPeriods)
+            pPeriodEdit->setStyleSheet("background-color: rgba(0, 0, 0, 0);color:red; border: none");
+        else
+            pPeriodEdit->setStyleSheet("background-color: rgba(0, 0, 0, 0);color:yellow; border: none");
     }// period
 
     sToken = XML_Parse(sMessage, "team0");
@@ -719,6 +736,10 @@ WaterpoloController::processTextMessage(QString sMessage) {
         pTimeoutEdit[0]->setText(QString("%1"). arg(iVal));
         pTimeoutDecrement[0]->setEnabled((iVal > 0));
         pTimeoutIncrement[0]->setEnabled((iVal != gsArgs.maxTimeout));
+        if(iVal >= gsArgs.maxTimeout)
+            pTimeoutEdit[0]->setStyleSheet("background-color: rgba(0, 0, 0, 0);color:red; border: none");
+        else
+            pTimeoutEdit[0]->setStyleSheet("background-color: rgba(0, 0, 0, 0);color:yellow; border: none");
     }// timeout0
 
     sToken = XML_Parse(sMessage, "timeout1");
@@ -729,6 +750,10 @@ WaterpoloController::processTextMessage(QString sMessage) {
         pTimeoutEdit[1]->setText(QString("%1"). arg(iVal));
         pTimeoutDecrement[1]->setEnabled((iVal > 0));
         pTimeoutIncrement[1]->setEnabled((iVal != gsArgs.maxTimeout));
+        if(iVal >= gsArgs.maxTimeout)
+            pTimeoutEdit[1]->setStyleSheet("background-color: rgba(0, 0, 0, 0);color:red; border: none");
+        else
+            pTimeoutEdit[1]->setStyleSheet("background-color: rgba(0, 0, 0, 0);color:yellow; border: none");
     }// timeout1
 
     sToken = XML_Parse(sMessage, "score0");
@@ -754,7 +779,15 @@ WaterpoloController::processTextMessage(QString sMessage) {
     sToken = XML_Parse(sMessage, "newGame");
     if(sToken != sNoData){
         pCountStart->setEnabled(true);
-    }// score1
+    }// newGame
+
+    sToken = XML_Parse(sMessage, "status");
+    if(sToken != sNoData){
+        if(sToken.toInt() == running) {
+            pCountStart->setDisabled(true);
+            pCountStop->setEnabled(true);
+        }
+    }// newGame
 
     BtScoreController::processGeneralMessages(sMessage);
 }
