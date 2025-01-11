@@ -31,6 +31,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define MAX_NAMELENGTH  15
 
+enum status {
+    showPanel,
+    showSpots,
+    showSlides,
+    running
+};
+
 
 void logMessage(QFile *logFile, QString sFunctionName, QString sMessage);
 QString XML_Parse(QString input_string, QString token);
