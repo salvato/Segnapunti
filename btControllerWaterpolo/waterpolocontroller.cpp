@@ -592,6 +592,7 @@ WaterpoloController::onCountStart(int iTeam) {
     QString sText = QString("<startT>%1</startT>")
                         .arg(1,1);
     sendMessage(sText);
+    pCountStop->setFocus();
 }
 
 
@@ -601,6 +602,7 @@ WaterpoloController::onCountStop(int iTeam) {
     QString sText = QString("<stopT>%1</stopT>")
                         .arg(1,1);
     sendMessage(sText);
+    pCountStart->setFocus();
 }
 
 
@@ -766,6 +768,14 @@ WaterpoloController::processTextMessage(QString sMessage) {
     sToken = XML_Parse(sMessage, "newGame");
     if(sToken != sNoData){
         pCountStart->setEnabled(true);
+    }// score1
+
+    sToken = XML_Parse(sMessage, "status");
+    if(sToken != sNoData){
+        if(sToken.toInt() == running) {
+            pCountStart->setDisabled(true);
+            pCountStop->setEnabled(true);
+        }
     }// score1
 
     BtScoreController::processGeneralMessages(sMessage);
