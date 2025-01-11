@@ -347,8 +347,6 @@ WaterPoloCtrl::disableUi() {
     }
     pPeriodEdit->setDisabled(true);
     pTimeEdit->setDisabled(true);
-    pPeriodIncrement->setDisabled(true);
-    pPeriodDecrement->setDisabled(true);
 
     pNewPeriodButton->setDisabled(true);
     pNewGameButton->setDisabled(true);
@@ -375,8 +373,6 @@ WaterPoloCtrl::enableUi() {
     }
     pPeriodEdit->setEnabled(true);
     pTimeEdit->setEnabled(true);
-    pPeriodIncrement->setEnabled(true);
-    pPeriodDecrement->setEnabled(true);
 
     pNewPeriodButton->setEnabled(true);
     pNewGameButton->setEnabled(true);
@@ -545,18 +541,6 @@ WaterPoloCtrl::buildControls() {
     pPeriodEdit->setPalette(pal);
     pPeriodEdit->setReadOnly(true);
 
-    //Period buttons
-    pPeriodIncrement = new Button("", 0);
-    pPeriodIncrement->setIcon(plusButtonIcon);
-    pPeriodIncrement->setIconSize(plusPixmap.rect().size());
-    pPeriodDecrement = new Button("", 0);
-    pPeriodDecrement->setIcon(minusButtonIcon);
-    pPeriodDecrement->setIconSize(minusPixmap.rect().size());
-    if(iPeriod == 1)
-        pPeriodDecrement->setDisabled(true);
-    if(iPeriod == gsArgs.maxPeriods)
-        pPeriodIncrement->setDisabled(true);
-
     // Timeout
     pTimeoutLabel = new QLabel(tr("Timeout"));
     pTimeoutLabel->setAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
@@ -611,11 +595,6 @@ WaterPoloCtrl::setEventHandlers() {
         connect(pScoreDecrement[iTeam], SIGNAL(buttonClicked(int)),
                 this, SLOT(onScoreDecrement(int)));
     }
-    // Period Buttons
-    connect(pPeriodIncrement, SIGNAL(buttonClicked(int)),
-            this, SLOT(onPeriodIncrement(int)));
-    connect(pPeriodDecrement, SIGNAL(buttonClicked(int)),
-            this, SLOT(onPeriodDecrement(int)));
     // Start/Stop Count
     connect(pCountStart, SIGNAL(buttonClicked(int)),
             this, SLOT(onCountStart(int)));
@@ -709,47 +688,6 @@ WaterPoloCtrl::onTimeUpdate() {
             lastM = iMinutes;
         }
     }
-}
-
-
-void
-WaterPoloCtrl::onPeriodIncrement(int) {
-    iPeriod++;
-    if(iPeriod >= gsArgs.maxPeriods) {
-        pPeriodIncrement->setEnabled(false);
-        pPeriodEdit->setStyleSheet("background-color: rgba(0, 0, 0, 0);color:red; border: none");
-    }
-    else
-        pPeriodEdit->setStyleSheet("background-color: rgba(0, 0, 0, 0);color:yellow; border: none");
-    pPeriodDecrement->setEnabled(true);
-    pWaterPoloPanel->setPeriod(iPeriod);
-    QString sMessage = QString("<period>%1</period>")
-                           .arg(iPeriod);
-    pBtServer->sendMessage(sMessage);
-    QString sText = QString("%1").arg(iPeriod);
-    pPeriodEdit->setText(sText);
-    sText = QString("game/period");
-    pSettings->setValue(sText, iPeriod);
-    pPeriodEdit->setFocus(); // Per evitare che il focus vada altrove
-}
-
-
-void
-WaterPoloCtrl::onPeriodDecrement(int) {
-    iPeriod--;
-    if(iPeriod == 1) {
-        pPeriodDecrement->setEnabled(false);
-    }
-    pPeriodIncrement->setEnabled(true);
-    pWaterPoloPanel->setPeriod(iPeriod);
-    QString sMessage = QString("<period>%1</period>")
-                           .arg(iPeriod);
-    pBtServer->sendMessage(sMessage);
-    QString sText = QString("%1").arg(iPeriod);
-    pPeriodEdit->setText(sText);
-    sText = QString("game/period");
-    pSettings->setValue(sText, iPeriod);
-    pPeriodEdit->setFocus(); // Per evitare che il focus vada altrove
 }
 
 
@@ -964,10 +902,6 @@ WaterPoloCtrl::onButtonNewPeriodClicked() {
 void
 WaterPoloCtrl::startNewPeriod() {
     iPeriod++;
-    if(iPeriod >= gsArgs.maxPeriods) {
-        pPeriodIncrement->setEnabled(false);
-    }
-    pPeriodDecrement->setEnabled(true);
     pCountStart->setEnabled(true);
     pCountStop->setDisabled(true);
     QString sText = QString("%1").arg(iPeriod);
@@ -996,7 +930,6 @@ WaterPoloCtrl::startNewPeriod() {
         pTimeoutIncrement[iTeam]->setEnabled(true);
     }
     if(iPeriod >= gsArgs.maxPeriods) {
-        pPeriodIncrement->setEnabled(false);
         pPeriodEdit->setStyleSheet("background-color: rgba(0, 0, 0, 0);color:red; border: none");
     }
     else
