@@ -699,6 +699,10 @@ WaterpoloController::processTextMessage(QString sMessage) {
     if(sToken != sNoData){
         pPeriodEdit->setText(sToken);
         iPeriod = sToken.toInt();
+        if(iPeriod >= gsArgs.maxPeriods)
+            pPeriodEdit->setStyleSheet("background:rgba(0, 0, 0, 0);color:red; border: none");
+        else
+            pPeriodEdit->setStyleSheet("background-color: rgba(0, 0, 0, 0);color:yellow; border: none");
     }// period
 
     sToken = XML_Parse(sMessage, "team0");
@@ -719,6 +723,10 @@ WaterpoloController::processTextMessage(QString sMessage) {
         pTimeoutEdit[0]->setText(QString("%1"). arg(iVal));
         pTimeoutDecrement[0]->setEnabled((iVal > 0));
         pTimeoutIncrement[0]->setEnabled((iVal != gsArgs.maxTimeout));
+        if(iVal >= gsArgs.maxTimeout)
+            pTimeoutEdit[0]->setStyleSheet("background:rgba(0, 0, 0, 0);color:red; border: none");
+        else
+            pTimeoutEdit[0]->setStyleSheet("background-color: rgba(0, 0, 0, 0);color:yellow; border: none");
     }// timeout0
 
     sToken = XML_Parse(sMessage, "timeout1");
@@ -729,6 +737,10 @@ WaterpoloController::processTextMessage(QString sMessage) {
         pTimeoutEdit[1]->setText(QString("%1"). arg(iVal));
         pTimeoutDecrement[1]->setEnabled((iVal > 0));
         pTimeoutIncrement[1]->setEnabled((iVal != gsArgs.maxTimeout));
+        if(iVal >= gsArgs.maxTimeout)
+            pTimeoutEdit[1]->setStyleSheet("background:rgba(0, 0, 0, 0);color:red; border: none");
+        else
+            pTimeoutEdit[1]->setStyleSheet("background-color: rgba(0, 0, 0, 0);color:yellow; border: none");
     }// timeout1
 
     sToken = XML_Parse(sMessage, "score0");

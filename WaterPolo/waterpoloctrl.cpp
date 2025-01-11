@@ -717,7 +717,10 @@ WaterPoloCtrl::onPeriodIncrement(int) {
     iPeriod++;
     if(iPeriod >= gsArgs.maxPeriods) {
         pPeriodIncrement->setEnabled(false);
+        pPeriodEdit->setStyleSheet("background-color: rgba(0, 0, 0, 0);color:red; border: none");
     }
+    else
+        pPeriodEdit->setStyleSheet("background-color: rgba(0, 0, 0, 0);color:yellow; border: none");
     pPeriodDecrement->setEnabled(true);
     pWaterPoloPanel->setPeriod(iPeriod);
     QString sMessage = QString("<period>%1</period>")
@@ -987,10 +990,17 @@ WaterPoloCtrl::startNewPeriod() {
         iTimeout[iTeam] = 0;
         sText = QString("%1").arg(iTimeout[iTeam], 1);
         pTimeoutEdit[iTeam]->setText(sText);
+
         pTimeoutEdit[iTeam]->setStyleSheet("background-color: rgba(0, 0, 0, 0);color:yellow; border: none");
         pTimeoutDecrement[iTeam]->setEnabled(false);
         pTimeoutIncrement[iTeam]->setEnabled(true);
     }
+    if(iPeriod >= gsArgs.maxPeriods) {
+        pPeriodIncrement->setEnabled(false);
+        pPeriodEdit->setStyleSheet("background-color: rgba(0, 0, 0, 0);color:red; border: none");
+    }
+    else
+        pPeriodEdit->setStyleSheet("background-color: rgba(0, 0, 0, 0);color:yellow; border: none");
     remainingMilliSeconds = gsArgs.iTimeDuration * 60000;
     runMilliSeconds = 0;
 
