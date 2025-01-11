@@ -27,7 +27,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QBluetoothLocalDevice>
 #include <QBluetoothHostInfo>
 
-#include "utility.h"
 #include "generalsetuparguments.h"
 
 
@@ -95,6 +94,12 @@ protected:
     QPushButton*          pGeneralSetupButton{};
     QPushButton*          pShutdownButton{};
     QHBoxLayout*          pSpotButtonsLayout;
+    enum status {
+        showPanel,
+        showSpots,
+        showSlides,
+        showCamera
+    };
     status          myStatus;
     QProcess*       pVideoPlayer;
     QString         sProcess;

@@ -82,7 +82,6 @@ WaterPoloCtrl::WaterPoloCtrl(QFile *myLogFile, QWidget *parent)
     pCountStop->setDisabled(true);
     startTimer.setSingleShot(true);
     startTimer.start(100);
-    myStatus = showPanel;
 }
 
 
@@ -442,9 +441,6 @@ WaterPoloCtrl::btSendAll() {
     else if(myStatus == showSpots)
         sMessage = QString("<spotloop>1</spotloop>");
     pBtServer->sendMessage(sMessage);
-    // Status
-    sMessage = QString("<status>%1</status>").arg(myStatus);
-    pBtServer->sendMessage(sMessage);
 }
 
 
@@ -695,7 +691,6 @@ WaterPoloCtrl::onTimeUpdate() {
             timeToStop = 0;
             tempoTimer.invalidate();
             enableUi();
-            myStatus = showPanel;
         }
         QString sRemainingTime;
         lldiv_t iRes = div(timeToStop+999, 60000LL);
@@ -808,7 +803,6 @@ WaterPoloCtrl::onCountStart(int iTeam) {
     disableUi();
     QString sMessage = QString("<startT>%1</startT>").arg(0, 1);
     pBtServer->sendMessage(sMessage);
-    myStatus = running;
 }
 
 
@@ -823,7 +817,6 @@ WaterPoloCtrl::onCountStop(int iTeam) {
     enableUi();
     QString sMessage = QString("<stopT>%1</stopT>").arg(0, 1);
     pBtServer->sendMessage(sMessage);
-    myStatus = showPanel;
 }
 
 
@@ -1060,6 +1053,7 @@ WaterPoloCtrl::onButtonNewGameClicked() {
 
 void
 WaterPoloCtrl::onChangePanelOrientation(PanelOrientation orientation) {
+    Q_UNUSED(orientation)
 #ifdef LOG_VERBOSE
     logMessage(pLogFile,
                Q_FUNC_INFO,

@@ -30,9 +30,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QtBluetooth/qbluetoothlocaldevice.h>
 #include <QtBluetooth/qbluetoothserver.h>
 
-#include "utility.h"
 #include "scorecontroller.h"
 #include "slidewidget.h"
+#include "utility.h"
 #include "btserver.h"
 
 
