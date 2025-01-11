@@ -773,6 +773,7 @@ WaterpoloController::processTextMessage(QString sMessage) {
     sToken = XML_Parse(sMessage, "status");
     if(sToken != sNoData){
         if(sToken.toInt() == running) {
+            disableUi();
             pCountStart->setDisabled(true);
             pCountStop->setEnabled(true);
         }
