@@ -741,12 +741,12 @@ void
 WaterPoloCtrl::onCountStart(int iTeam) {
     Q_UNUSED(iTeam)
     tempoTimer.restart();
+    myStatus = running;
     pCountStart->setDisabled(true);
     pCountStop->setEnabled(true);
     disableUi();
     QString sMessage = QString("<startT>%1</startT>").arg(0, 1);
     pBtServer->sendMessage(sMessage);
-    myStatus = running;
 }
 
 
@@ -755,13 +755,13 @@ WaterPoloCtrl::onCountStop(int iTeam) {
     Q_UNUSED(iTeam)
     runMilliSeconds += tempoTimer.elapsed();
     tempoTimer.invalidate();
+    myStatus = showPanel;
     pCountStart->setEnabled(true);
     pCountStop->setDisabled(true);
     pTimeEdit->setEnabled(true);
     enableUi();
     QString sMessage = QString("<stopT>%1</stopT>").arg(0, 1);
     pBtServer->sendMessage(sMessage);
-    myStatus = showPanel;
 }
 
 
