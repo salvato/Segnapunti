@@ -19,6 +19,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+#include <QTimer>
+
 #include "remainingtimedialog.h"
 #include "../CommonFiles/btscorecontroller.h"
 #include "../CommonFiles/panelorientation.h"
@@ -54,10 +56,9 @@ protected:
     void          processTextMessage(QString sMessage);
 
 private slots:
+    void onAppStart();
     void closeEvent(QCloseEvent*);
     void onGameTimeChanging();
-//TODO
-    // void onTimeUpdate();
     void onButtonNewPeriodClicked();
     void onTimeOutIncrement(int iTeam);
     void onTimeOutDecrement(int iTeam);
@@ -108,5 +109,6 @@ private:
     int             maxTeamNameLen= 15;
     qint64          runMilliSeconds;
     qint64          remainingMilliSeconds;
+    QTimer          startTimer;
 };
 

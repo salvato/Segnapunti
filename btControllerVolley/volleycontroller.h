@@ -54,6 +54,7 @@ protected:
     void          processTextMessage(QString sMessage);
 
 private slots:
+    void onAppStart();
     void closeEvent(QCloseEvent*);
     void onTimeOutIncrement(int iTeam);
     void onTimeOutDecrement(int iTeam);
@@ -107,5 +108,6 @@ private:
     QString         sScoreFileName;
     QFile*          pScoreFile;
     int             maxTeamNameLen= 15;
+    QTimer          startTimer;
 };
 

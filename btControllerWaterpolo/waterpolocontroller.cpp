@@ -85,6 +85,16 @@ WaterpoloController::WaterpoloController(QFile *myLogFile, QWidget *parent)
 #ifdef Q_OS_ANDROID
     keepScreenOn();
 #endif
+    connect(&startTimer, SIGNAL(timeout()),
+            this, SLOT(onAppStart()));
+    startTimer.setSingleShot(true);
+    startTimer.start(500);
+}
+
+
+void
+WaterpoloController::onAppStart() {
+    connectToServer();
 }
 
 

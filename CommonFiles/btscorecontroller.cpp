@@ -79,23 +79,6 @@ BtScoreController::BtScoreController(QFile *myLogFile, QWidget *parent)
         qCritical() << "Paired Device:" << pairedDevices.at(i);
 #endif
 
-    // Let's try first the saved address (if any)
-    QBluetoothAddress address(QBluetoothAddress(pSettings->value("ServerAddress", "").toString()));
-    if(!address.isNull()) {
-        tryConnectLastKnown(address);
-    }
-    else { // else We will try to either:
-           //   connect to Paired devices (LINUX or ANDROID)
-           //   or using QBluetoothServiceDiscoveryAgent (WINDOWS)
-#ifdef Q_OS_ANDROID
-        tryPaired();
-#elif defined Q_OS_LINUX
-        tryPaired();
-#else
-        startBtDiscovery(QBluetoothUuid(serviceUuid));
-#endif
-    }
-
     setDisabled(true);
     myStatus = showPanel;
 }
@@ -278,6 +261,28 @@ BtScoreController::connectButtonSignals() {
 // Dummy... see Volley Panel
 void
 BtScoreController::GeneralSetup() {
+}
+
+
+void
+BtScoreController::connectToServer() {
+
+    // Let's try first the saved address (if any)
+    QBluetoothAddress address(QBluetoothAddress(pSettings->value("ServerAddress", "").toString()));
+    if(!address.isNull()) {
+        tryConnectLastKnown(address);
+    }
+    else { // else We will try to either:
+        //   connect to Paired devices (LINUX or ANDROID)
+        //   or using QBluetoothServiceDiscoveryAgent (WINDOWS)
+#ifdef Q_OS_ANDROID
+        tryPaired();
+#elif defined Q_OS_LINUX
+        tryPaired();
+#else
+        startBtDiscovery(QBluetoothUuid(serviceUuid));
+#endif
+    }
 }
 
 

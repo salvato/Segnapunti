@@ -27,6 +27,7 @@ class BtScoreController : public QMainWindow
 public:
     BtScoreController(QFile *myLogFile, QWidget *parent = nullptr);
     ~BtScoreController();
+    void connectToServer();
 
 protected slots:
     void onButtonSpotLoopClicked();
@@ -46,6 +47,7 @@ private slots:
 protected:
     void            initBluetooth();
     void            tryPaired();
+    void            tryConnectLastKnown(QBluetoothAddress address);
     bool            prepareLogFile();
     QHBoxLayout*    CreateSpotButtons();
     void            connectButtonSignals();
@@ -58,7 +60,6 @@ protected:
     void            processGeneralMessages(QString sMessage);
     void            disableGeneralButtons();
     void            enableGeneralButtons();
-    void            tryConnectLastKnown(QBluetoothAddress address);
 #ifdef Q_OS_ANDROID
     bool checkException(const char* method, const QJniObject* obj);
 #endif
