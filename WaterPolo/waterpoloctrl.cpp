@@ -347,8 +347,6 @@ WaterPoloCtrl::disableUi() {
     }
     pPeriodEdit->setDisabled(true);
     pTimeEdit->setDisabled(true);
-    pPeriodIncrement->setDisabled(true);
-    pPeriodDecrement->setDisabled(true);
 
     pNewPeriodButton->setDisabled(true);
     pNewGameButton->setDisabled(true);
@@ -375,8 +373,6 @@ WaterPoloCtrl::enableUi() {
     }
     pPeriodEdit->setEnabled(true);
     pTimeEdit->setEnabled(true);
-    pPeriodIncrement->setEnabled(true);
-    pPeriodDecrement->setEnabled(true);
 
     pNewPeriodButton->setEnabled(true);
     pNewGameButton->setEnabled(true);
@@ -440,6 +436,8 @@ WaterPoloCtrl::btSendAll() {
         sMessage = QString("<slideshow>1</slideshow>");
     else if(myStatus == showSpots)
         sMessage = QString("<spotloop>1</spotloop>");
+    pBtServer->sendMessage(sMessage);
+    sMessage = QString("<status>%1</status>").arg(myStatus, 1);
     pBtServer->sendMessage(sMessage);
 }
 
@@ -545,18 +543,6 @@ WaterPoloCtrl::buildControls() {
     pPeriodEdit->setPalette(pal);
     pPeriodEdit->setReadOnly(true);
 
-    //Period buttons
-    pPeriodIncrement = new Button("", 0);
-    pPeriodIncrement->setIcon(plusButtonIcon);
-    pPeriodIncrement->setIconSize(plusPixmap.rect().size());
-    pPeriodDecrement = new Button("", 0);
-    pPeriodDecrement->setIcon(minusButtonIcon);
-    pPeriodDecrement->setIconSize(minusPixmap.rect().size());
-    if(iPeriod == 1)
-        pPeriodDecrement->setDisabled(true);
-    if(iPeriod == gsArgs.maxPeriods)
-        pPeriodIncrement->setDisabled(true);
-
     // Timeout
     pTimeoutLabel = new QLabel(tr("Timeout"));
     pTimeoutLabel->setAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
@@ -611,11 +597,6 @@ WaterPoloCtrl::setEventHandlers() {
         connect(pScoreDecrement[iTeam], SIGNAL(buttonClicked(int)),
                 this, SLOT(onScoreDecrement(int)));
     }
-    // Period Buttons
-    connect(pPeriodIncrement, SIGNAL(buttonClicked(int)),
-            this, SLOT(onPeriodIncrement(int)));
-    connect(pPeriodDecrement, SIGNAL(buttonClicked(int)),
-            this, SLOT(onPeriodDecrement(int)));
     // Start/Stop Count
     connect(pCountStart, SIGNAL(buttonClicked(int)),
             this, SLOT(onCountStart(int)));
@@ -713,44 +694,6 @@ WaterPoloCtrl::onTimeUpdate() {
 
 
 void
-WaterPoloCtrl::onPeriodIncrement(int) {
-    iPeriod++;
-    if(iPeriod >= gsArgs.maxPeriods) {
-        pPeriodIncrement->setEnabled(false);
-    }
-    pPeriodDecrement->setEnabled(true);
-    pWaterPoloPanel->setPeriod(iPeriod);
-    QString sMessage = QString("<period>%1</period>")
-                           .arg(iPeriod);
-    pBtServer->sendMessage(sMessage);
-    QString sText = QString("%1").arg(iPeriod);
-    pPeriodEdit->setText(sText);
-    sText = QString("game/period");
-    pSettings->setValue(sText, iPeriod);
-    pPeriodEdit->setFocus(); // Per evitare che il focus vada altrove
-}
-
-
-void
-WaterPoloCtrl::onPeriodDecrement(int) {
-    iPeriod--;
-    if(iPeriod == 1) {
-        pPeriodDecrement->setEnabled(false);
-    }
-    pPeriodIncrement->setEnabled(true);
-    pWaterPoloPanel->setPeriod(iPeriod);
-    QString sMessage = QString("<period>%1</period>")
-                           .arg(iPeriod);
-    pBtServer->sendMessage(sMessage);
-    QString sText = QString("%1").arg(iPeriod);
-    pPeriodEdit->setText(sText);
-    sText = QString("game/period");
-    pSettings->setValue(sText, iPeriod);
-    pPeriodEdit->setFocus(); // Per evitare che il focus vada altrove
-}
-
-
-void
 WaterPoloCtrl::onTimeOutIncrement(int iTeam) {
     iTimeout[iTeam]++;
     if(iTimeout[iTeam] >= gsArgs.maxTimeout) {
@@ -803,6 +746,7 @@ WaterPoloCtrl::onCountStart(int iTeam) {
     disableUi();
     QString sMessage = QString("<startT>%1</startT>").arg(0, 1);
     pBtServer->sendMessage(sMessage);
+    myStatus = running;
 }
 
 
@@ -817,6 +761,7 @@ WaterPoloCtrl::onCountStop(int iTeam) {
     enableUi();
     QString sMessage = QString("<stopT>%1</stopT>").arg(0, 1);
     pBtServer->sendMessage(sMessage);
+    myStatus = showPanel;
 }
 
 
@@ -961,10 +906,6 @@ WaterPoloCtrl::onButtonNewPeriodClicked() {
 void
 WaterPoloCtrl::startNewPeriod() {
     iPeriod++;
-    if(iPeriod >= gsArgs.maxPeriods) {
-        pPeriodIncrement->setEnabled(false);
-    }
-    pPeriodDecrement->setEnabled(true);
     pCountStart->setEnabled(true);
     pCountStop->setDisabled(true);
     QString sText = QString("%1").arg(iPeriod);
@@ -987,10 +928,16 @@ WaterPoloCtrl::startNewPeriod() {
         iTimeout[iTeam] = 0;
         sText = QString("%1").arg(iTimeout[iTeam], 1);
         pTimeoutEdit[iTeam]->setText(sText);
+
         pTimeoutEdit[iTeam]->setStyleSheet("background-color: rgba(0, 0, 0, 0);color:yellow; border: none");
         pTimeoutDecrement[iTeam]->setEnabled(false);
         pTimeoutIncrement[iTeam]->setEnabled(true);
     }
+    if(iPeriod >= gsArgs.maxPeriods) {
+        pPeriodEdit->setStyleSheet("background-color: rgba(0, 0, 0, 0);color:red; border: none");
+    }
+    else
+        pPeriodEdit->setStyleSheet("background-color: rgba(0, 0, 0, 0);color:yellow; border: none");
     remainingMilliSeconds = gsArgs.iTimeDuration * 60000;
     runMilliSeconds = 0;
 
