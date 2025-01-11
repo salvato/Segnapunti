@@ -27,7 +27,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QJniObject>
 #endif
 
-
 ///////////////////////////////////////////////////////////////////////
 // In Android pare non funzionare il QBluetoothServiceDiscoveryAgent //
 ///////////////////////////////////////////////////////////////////////
@@ -68,8 +67,6 @@ BtScoreController::BtScoreController(QFile *myLogFile, QWidget *parent)
 
     currentDevice = -1;
 #ifdef Q_OS_ANDROID
-    pairedDevices.append(getBluetoothDevicesAdress());
-#elif defined Q_OS_LINUX
     pairedDevices.append(getBluetoothDevicesAdress());
 #endif
 
@@ -136,27 +133,6 @@ BtScoreController::getBluetoothDevicesAdress() {
                                               "()Ljava/lang/String;").toString(); // returns a String
             // result.append(fmt.arg(address).arg(name));
             result.append(fmt.arg(address));
-        }
-    }
-#elif defined Q_OS_LINUX
-    // Query via the Linux command bluetoothctl devices.
-    QProcess command;
-    command.start("/usr/bin/bluetoothctl",  QStringList("devices"));
-    command.waitForFinished(3000);
-    if (command.error()==QProcess::FailedToStart) {
-        qWarning("Cannot execute the command '/usr/bin/bluetoothctl': %s",qPrintable(command.errorString()));
-    }
-    else {
-        // Parse the output, example: HC-06 (20:13:11:15:16:08)
-        QByteArray output=command.readAllStandardOutput();
-        foreach(QByteArray line, output.split('\n')) {
-            QList<QByteArray> elements =line.split(' ');
-             if (elements.count() > 1) {
-                result.append(fmt.arg(elements.at(1)));
-#ifdef BT_DEBUG
-                qCritical() << elements.at(1) << elements.at(2);
-#endif
-            }
         }
     }
 #endif
@@ -276,8 +252,6 @@ BtScoreController::connectToServer() {
         //   connect to Paired devices (LINUX or ANDROID)
         //   or using QBluetoothServiceDiscoveryAgent (WINDOWS)
 #ifdef Q_OS_ANDROID
-        tryPaired();
-#elif defined Q_OS_LINUX
         tryPaired();
 #else
         startBtDiscovery(QBluetoothUuid(serviceUuid));
@@ -647,8 +621,6 @@ BtScoreController::onPanelClientDisconnected() {
     }
 #ifdef Q_OS_ANDROID
     tryPaired();
-#elif defined Q_OS_LINUX
-    tryPaired();
 #else
     startBtDiscovery(QBluetoothUuid(serviceUuid));
 #endif
@@ -668,8 +640,6 @@ BtScoreController::onPanelClientSocketError(QString sError) {
         pPanelClient = nullptr;
     }
 #ifdef Q_OS_ANDROID
-    tryPaired();
-#elif defined Q_OS_LINUX
     tryPaired();
 #else
     startBtDiscovery(QBluetoothUuid(serviceUuid));
