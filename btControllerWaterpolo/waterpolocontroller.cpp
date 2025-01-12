@@ -725,7 +725,7 @@ WaterpoloController::processTextMessage(QString sMessage) {
     if(sToken != sNoData){
         iVal = sToken.toInt(&ok);
         if(!ok || iVal<0 || iVal>2)
-            iVal = 8;
+            iVal = gsArgs.maxTimeout;
         pTimeoutEdit[0]->setText(QString("%1"). arg(iVal));
         pTimeoutDecrement[0]->setEnabled((iVal > 0));
         pTimeoutIncrement[0]->setEnabled((iVal != gsArgs.maxTimeout));
@@ -738,8 +738,8 @@ WaterpoloController::processTextMessage(QString sMessage) {
     sToken = XML_Parse(sMessage, "timeout1");
     if(sToken != sNoData){
         iVal = sToken.toInt(&ok);
-        if(!ok || iVal<0 || iVal>2)
-            iVal = 8;
+        if(!ok || iVal<0 || iVal>gsArgs.maxTimeout)
+            iVal = gsArgs.maxTimeout;
         pTimeoutEdit[1]->setText(QString("%1"). arg(iVal));
         pTimeoutDecrement[1]->setEnabled((iVal > 0));
         pTimeoutIncrement[1]->setEnabled((iVal != gsArgs.maxTimeout));
