@@ -575,6 +575,7 @@ WaterpoloController::onTimeOutIncrement(int iTeam) {
     QString sText = QString("<inctimeout>%1</inctimeout>")
                         .arg(iTeam,1);
     sendMessage(sText);
+    pTimeoutDecrement[iTeam]->setFocus();
 }
 
 
@@ -583,6 +584,7 @@ WaterpoloController::onTimeOutDecrement(int iTeam) {
     QString sText = QString("<dectimeout>%1</dectimeout>")
                         .arg(iTeam,1);
     sendMessage(sText);
+    pTimeoutIncrement[iTeam]->setFocus();
 }
 
 
@@ -611,6 +613,7 @@ WaterpoloController::onScoreIncrement(int iTeam) {
     QString sText = QString("<incscore>%1</incscore>")
                     .arg(iTeam,1);
     sendMessage(sText);
+    pScoreDecrement[iTeam]->setFocus();
 }
 
 
@@ -619,6 +622,7 @@ WaterpoloController::onScoreDecrement(int iTeam) {
     QString sText = QString("<decscore>%1</decscore>")
                         .arg(iTeam,1);
     sendMessage(sText);
+    pScoreIncrement[iTeam]->setFocus();
 }
 
 
