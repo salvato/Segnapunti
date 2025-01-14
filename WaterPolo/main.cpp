@@ -9,7 +9,7 @@ main(int argc, char *argv[]) {
     QSurfaceFormat format;
 #ifdef Q_PROCESSOR_ARM_64
     format.setRenderableType(QSurfaceFormat::OpenGLES);
-    format.setVersion(3, 1);
+    format.setVersion(1, 1);
 #endif
     format.setDepthBufferSize(32);
     format.setSamples(4);

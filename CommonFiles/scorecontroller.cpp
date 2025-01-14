@@ -251,8 +251,14 @@ ScoreController::connectButtonSignals() {
 
 
 void
+ScoreController::changeFocus() {
+}
+
+
+void
 ScoreController::onButtonSetupClicked() {
     GeneralSetup();
+    changeFocus();
 }
 
 
@@ -435,6 +441,7 @@ ScoreController::onButtonSpotLoopClicked() {
         myStatus = showPanel;
         QString sMessage = QString("<endSpotLoop>1</endSpotLoop>");
         emit sendMessage(sMessage);
+        changeFocus();
     }
 }
 
@@ -468,6 +475,7 @@ ScoreController::onButtonSlideShowClicked() {
         myStatus = showPanel;
         QString sMessage = QString("<endSlideShow>1</endSlideShow>");
         emit sendMessage(sMessage);
+        changeFocus();
     }
     unsetCursor();
 }

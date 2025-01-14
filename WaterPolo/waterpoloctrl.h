@@ -85,6 +85,7 @@ private:
     void          startNewPeriod();
     void          disableUi();
     void          enableUi();
+    void          changeFocus();
 
 private:
     WaterPoloPanel* pWaterPoloPanel;
