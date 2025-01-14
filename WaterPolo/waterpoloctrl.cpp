@@ -115,6 +115,12 @@ WaterPoloCtrl::resizeEvent(QResizeEvent *event) {
 
 
 void
+WaterPoloCtrl::changeFocus() {
+    pCountStart->setFocus();
+}
+
+
+void
 WaterPoloCtrl::GeneralSetup() {
     GeneralSetupDialog* pGeneralSetupDialog = new GeneralSetupDialog(&gsArgs);
     connect(pGeneralSetupDialog, SIGNAL(changeOrientation(PanelOrientation)),
@@ -147,6 +153,7 @@ WaterPoloCtrl::GeneralSetup() {
     }
     delete pGeneralSetupDialog;
     pGeneralSetupDialog = nullptr;
+    changeFocus();
 }
 
 
@@ -379,6 +386,7 @@ WaterPoloCtrl::enableUi() {
     pChangeFieldButton->setEnabled(true);
 
     enableGeneralButtons();
+    changeFocus();
 }
 
 
@@ -625,6 +633,7 @@ void
 WaterPoloCtrl::onAppStart() {
     sendAll();
     updateTimer.start(20);
+    changeFocus();
 }
 
 
@@ -655,7 +664,7 @@ WaterPoloCtrl::onGameTimeChanging() {
             }
         }
     }
-    pCountStart->setFocus();
+    changeFocus();
     // Settare il Focus su un altro controllo
 }
 
@@ -711,7 +720,7 @@ WaterPoloCtrl::onTimeOutIncrement(int iTeam) {
     pTimeoutEdit[iTeam]->setText(sText);
     sText = QString("team%1/timeouts").arg(iTeam+1, 1);
     pSettings->setValue(sText, iTimeout[iTeam]);
-    pTimeoutEdit[iTeam]->setFocus(); // Per evitare che il focus vada all'edit delle squadre
+    changeFocus();
 }
 
 
@@ -734,6 +743,7 @@ WaterPoloCtrl::onTimeOutDecrement(int iTeam) {
     pTimeoutEdit[iTeam]->setText(sText);
     sText = QString("team%1/timeouts").arg(iTeam+1, 1);
     pSettings->setValue(sText, iTimeout[iTeam]);
+    changeFocus();
 }
 
 
@@ -747,6 +757,7 @@ WaterPoloCtrl::onCountStart(int iTeam) {
     disableUi();
     QString sMessage = QString("<startT>%1</startT>").arg(0, 1);
     pBtServer->sendMessage(sMessage);
+    pCountStop->setFocus();
 }
 
 
@@ -762,6 +773,7 @@ WaterPoloCtrl::onCountStop(int iTeam) {
     enableUi();
     QString sMessage = QString("<stopT>%1</stopT>").arg(0, 1);
     pBtServer->sendMessage(sMessage);
+    changeFocus();
 }
 
 
@@ -783,6 +795,7 @@ WaterPoloCtrl::onScoreIncrement(int iTeam) {
     pScoreEdit[iTeam]->setText(sText);
     sText = QString("team%1/score").arg(iTeam+1, 1);
     pSettings->setValue(sText, iScore[iTeam]);
+    changeFocus();
 }
 
 
@@ -804,6 +817,7 @@ WaterPoloCtrl::onScoreDecrement(int iTeam) {
     pScoreEdit[iTeam]->setText(sText);
     sText = QString("team%1/score").arg(iTeam+1, 1);
     pSettings->setValue(sText, iScore[iTeam]);
+    changeFocus();
 }
 
 
@@ -818,6 +832,7 @@ WaterPoloCtrl::onTeamTextChanged(QString sText, int iTeam) {
     pBtServer->sendMessage(sMessage);
     sText = QString("team%1/name").arg(iTeam+1, 1);
     pSettings->setValue(sText, gsArgs.sTeam[iTeam]);
+    changeFocus();
 }
 
 
@@ -829,6 +844,7 @@ WaterPoloCtrl::onButtonChangeFieldClicked() {
                                      QMessageBox::No);
     if(iRes != QMessageBox::Yes) return;
     exchangeField();
+    changeFocus();
 }
 
 
@@ -900,6 +916,7 @@ WaterPoloCtrl::onButtonNewPeriodClicked() {
                                      QMessageBox::No);
     if(iRes != QMessageBox::Yes) return;
     startNewPeriod();
+    changeFocus();
 }
 
 
@@ -995,6 +1012,7 @@ WaterPoloCtrl::onButtonNewGameClicked() {
     SaveStatus();
     sText = QString("<newGame>0</newGame>");
     pBtServer->sendMessage(sText);
+    changeFocus();
 }
 
 
@@ -1009,6 +1027,7 @@ WaterPoloCtrl::onChangePanelOrientation(PanelOrientation orientation) {
 #endif
     gsArgs.isPanelMirrored = orientation==PanelOrientation::Reflected;
     pWaterPoloPanel->setMirrored(gsArgs.isPanelMirrored);
+    changeFocus();
 }
 
 
