@@ -85,6 +85,7 @@ protected:
     QString         XML_Parse(const QString& input_string, const QString& token);
     virtual void    processBtMessage(QString sMessage);
     virtual void    btSendAll();
+    virtual void    changeFocus();
 
 protected:
     GeneralSetupArguments gsArgs;
