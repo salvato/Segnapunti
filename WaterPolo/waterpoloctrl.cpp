@@ -842,7 +842,10 @@ WaterPoloCtrl::onButtonChangeFieldClicked() {
                                      tr("Scambiare il campo delle squadre ?"),
                                      QMessageBox::Yes | QMessageBox::No,
                                      QMessageBox::No);
-    if(iRes != QMessageBox::Yes) return;
+    if(iRes != QMessageBox::Yes) {
+        changeFocus();
+        return;
+    }
     exchangeField();
     changeFocus();
 }
@@ -908,13 +911,17 @@ WaterPoloCtrl::onButtonNewPeriodClicked() {
     if(iPeriod == gsArgs.maxPeriods) {
         QMessageBox::information(this, tr("WaterPolo_Controller"),
                                          tr("Massimo Numero di periodi Raggiunto"));
+        changeFocus();
         return;
     }
     int iRes = QMessageBox::question(this, tr("WaterPolo_Controller"),
                                      tr("Vuoi davvero iniziare un nuovo Periodo ?"),
                                      QMessageBox::Yes | QMessageBox::No,
                                      QMessageBox::No);
-    if(iRes != QMessageBox::Yes) return;
+    if(iRes != QMessageBox::Yes) {
+        changeFocus();
+        return;
+    }
     startNewPeriod();
     changeFocus();
 }
@@ -977,7 +984,10 @@ WaterPoloCtrl::onButtonNewGameClicked() {
                                      tr("Iniziare una Nuova Partita ?"),
                                      QMessageBox::Yes | QMessageBox::No,
                                      QMessageBox::No);
-    if(iResponse != QMessageBox::Yes) return;
+    if(iResponse != QMessageBox::Yes) {
+        changeFocus();
+        return;
+    }
 
     gsArgs.sTeam[0]    = tr("Locali");
     gsArgs.sTeam[1]    = tr("Ospiti");
