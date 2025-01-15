@@ -30,7 +30,6 @@ public:
 
 public:
     QSize sizeHint() const Q_DECL_OVERRIDE;
-    void keyPressEvent(QKeyEvent* event) Q_DECL_OVERRIDE;
 
 public slots:
     void onTextChanged(QString sText);
@@ -38,7 +37,6 @@ public slots:
 signals:
     void teamTextChanged(QString sText, int iTeam);
     void mousePressed();
-    void editDone();
 
 private:
     void mousePressEvent(QMouseEvent *e) override;

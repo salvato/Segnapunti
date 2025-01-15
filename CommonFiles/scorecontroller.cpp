@@ -88,15 +88,17 @@ bool
 ScoreController::eventFilter(QObject *obj, QEvent *event) {
     if (event->type() == QEvent::KeyPress) {
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-        if(((keyEvent->key() == Qt::Key_Left)   ||
-            (keyEvent->key() == Qt::Key_Right)) &&
-           (keyEvent->modifiers() == Qt::AltModifier))
-        {
-//            qSwap(iPrimaryScreen, iSecondaryScreen);
-//            changeScreen();
-//            qCritical() << "key " << keyEvent->key() << "from" << obj;
+        if(keyEvent->key() == Qt::Key_Tab)
+            return true;
+        // if(((keyEvent->key() == Qt::Key_Left)   ||
+        //     (keyEvent->key() == Qt::Key_Right)) &&
+        //    (keyEvent->modifiers() == Qt::AltModifier))
+        // {
+           // qSwap(iPrimaryScreen, iSecondaryScreen);
+           // changeScreen();
+           // qCritical() << "key " << keyEvent->key() << "from" << obj;
         }
-    }
+    // }
     return QObject::eventFilter(obj, event);
 }
 
