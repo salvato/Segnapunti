@@ -413,42 +413,42 @@ WaterPoloCtrl::btSendAll() {
 
     sMessage = QString("<setOrientation>%1</setOrientation>")
                    .arg(static_cast<int>(gsArgs.isPanelMirrored));
-    pBtServer->sendMessage(sMessage);
+    if(pBtServer) pBtServer->sendMessage(sMessage);
 
     for(int i=0; i<2; i++) {
         sMessage = QString("<team%1>%2</team%3>")
         .arg(i,1)
             .arg(pTeamName[i]->text().toLocal8Bit().data())
             .arg(i,1);
-        pBtServer->sendMessage(sMessage);
+        if(pBtServer) pBtServer->sendMessage(sMessage);
         sMessage = QString("<timeout%1>%2</timeout%3>")
                        .arg(i,1)
                        .arg(iTimeout[i])
                        .arg(i,1);
-        pBtServer->sendMessage(sMessage);
+        if(pBtServer) pBtServer->sendMessage(sMessage);
         sMessage = QString("<score%1>%2</score%3>")
                        .arg(i,1)
                        .arg(iScore[i], 2)
                        .arg(i,1);
-        pBtServer->sendMessage(sMessage);
+        if(pBtServer) pBtServer->sendMessage(sMessage);
     }
     // Time
     sMessage = QString("<time>%1</time>").arg(pTimeEdit->text());
-    pBtServer->sendMessage(sMessage);
+    if(pBtServer) pBtServer->sendMessage(sMessage);
     sMessage = QString("<startTime>%1</startTime>").arg(pTimeEdit->text());
-    pBtServer->sendMessage(sMessage);
+    if(pBtServer) pBtServer->sendMessage(sMessage);
     // Period
     sMessage = QString("<period>%1</period>")
                            .arg(pPeriodEdit->text(), 1);
-    pBtServer->sendMessage(sMessage);
+    if(pBtServer) pBtServer->sendMessage(sMessage);
     // Slideshow/Video
     if(myStatus == showSlides)
         sMessage = QString("<slideshow>1</slideshow>");
     else if(myStatus == showSpots)
         sMessage = QString("<spotloop>1</spotloop>");
-    pBtServer->sendMessage(sMessage);
+    if(pBtServer) pBtServer->sendMessage(sMessage);
     sMessage = QString("<status>%1</status>").arg(myStatus, 1);
-    pBtServer->sendMessage(sMessage);
+    if(pBtServer) pBtServer->sendMessage(sMessage);
 }
 
 
@@ -662,7 +662,7 @@ WaterPoloCtrl::onGameTimeChanging() {
                 pCountStart->setEnabled(true);
                 QString sMessage = QString("<time>%1</time>")
                                        .arg(sRemainingTime);
-                pBtServer->sendMessage(sMessage);
+                if(pBtServer) pBtServer->sendMessage(sMessage);
             }
         }
     }
@@ -696,7 +696,7 @@ WaterPoloCtrl::onTimeUpdate() {
             pWaterPoloPanel->setTime(sRemainingTime);
             QString sMessage = QString("<time>%1</time>")
                                    .arg(sRemainingTime);
-            pBtServer->sendMessage(sMessage);
+            if(pBtServer) pBtServer->sendMessage(sMessage);
             lastS = iSeconds;
             lastM = iMinutes;
         }
@@ -717,7 +717,7 @@ WaterPoloCtrl::onTimeOutIncrement(int iTeam) {
                            .arg(iTeam,1)
                            .arg(iTimeout[iTeam])
                            .arg(iTeam,1);
-    pBtServer->sendMessage(sMessage);
+    if(pBtServer) pBtServer->sendMessage(sMessage);
     QString sText = QString("%1").arg(iTimeout[iTeam]);
     pTimeoutEdit[iTeam]->setText(sText);
     sText = QString("team%1/timeouts").arg(iTeam+1, 1);
@@ -739,7 +739,7 @@ WaterPoloCtrl::onTimeOutDecrement(int iTeam) {
                            .arg(iTeam,1)
                            .arg(iTimeout[iTeam])
                            .arg(iTeam,1);
-    pBtServer->sendMessage(sMessage);
+    if(pBtServer) pBtServer->sendMessage(sMessage);
     QString sText;
     sText = QString("%1").arg(iTimeout[iTeam], 1);
     pTimeoutEdit[iTeam]->setText(sText);
@@ -758,7 +758,7 @@ WaterPoloCtrl::onCountStart(int iTeam) {
     pCountStop->setEnabled(true);
     disableUi();
     QString sMessage = QString("<startT>%1</startT>").arg(0, 1);
-    pBtServer->sendMessage(sMessage);
+    if(pBtServer) pBtServer->sendMessage(sMessage);
     pCountStop->setFocus();
 }
 
@@ -774,7 +774,7 @@ WaterPoloCtrl::onCountStop(int iTeam) {
     pTimeEdit->setEnabled(true);
     enableUi();
     QString sMessage = QString("<stopT>%1</stopT>").arg(0, 1);
-    pBtServer->sendMessage(sMessage);
+    if(pBtServer) pBtServer->sendMessage(sMessage);
     changeFocus();
 }
 
@@ -791,7 +791,7 @@ WaterPoloCtrl::onScoreIncrement(int iTeam) {
                            .arg(iTeam,1)
                            .arg(iScore[iTeam], 2)
                            .arg(iTeam,1);
-    pBtServer->sendMessage(sMessage);
+    if(pBtServer) pBtServer->sendMessage(sMessage);
     QString sText;
     sText = QString("%1").arg(iScore[iTeam], 2);
     pScoreEdit[iTeam]->setText(sText);
@@ -813,7 +813,7 @@ WaterPoloCtrl::onScoreDecrement(int iTeam) {
                            .arg(iTeam,1)
                            .arg(iScore[iTeam], 2)
                            .arg(iTeam,1);
-    pBtServer->sendMessage(sMessage);
+    if(pBtServer) pBtServer->sendMessage(sMessage);
     QString sText;
     sText = QString("%1").arg(iScore[iTeam], 2);
     pScoreEdit[iTeam]->setText(sText);
@@ -831,7 +831,7 @@ WaterPoloCtrl::onTeamTextChanged(QString sText, int iTeam) {
                            .arg(iTeam,1)
                            .arg(gsArgs.sTeam[iTeam])
                            .arg(iTeam,1);
-    pBtServer->sendMessage(sMessage);
+    if(pBtServer) pBtServer->sendMessage(sMessage);
     sText = QString("team%1/name").arg(iTeam+1, 1);
     pSettings->setValue(sText, gsArgs.sTeam[iTeam]);
     changeFocus();
@@ -1023,7 +1023,7 @@ WaterPoloCtrl::onButtonNewGameClicked() {
     sendAll();
     SaveStatus();
     sText = QString("<newGame>0</newGame>");
-    pBtServer->sendMessage(sText);
+    if(pBtServer) pBtServer->sendMessage(sText);
     changeFocus();
 }
 
@@ -1159,7 +1159,7 @@ WaterPoloCtrl::processBtMessage(QString sMessage) {
                 pCountStart->setEnabled(true);
                 QString sMessage = QString("<time>%1</time>")
                                        .arg(sRemainingTime);
-                pBtServer->sendMessage(sMessage);
+                if(pBtServer) pBtServer->sendMessage(sMessage);
             }
         }
     }// Change Remaining Time
