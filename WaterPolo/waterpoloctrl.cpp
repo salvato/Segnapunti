@@ -407,6 +407,8 @@ WaterPoloCtrl::sendAll() {
 
 void
 WaterPoloCtrl::btSendAll() {
+    if(!pBtServer)
+        return;
     QString sMessage = QString();
 
     sMessage = QString("<setOrientation>%1</setOrientation>")

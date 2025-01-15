@@ -47,6 +47,7 @@ ScoreController::ScoreController(QFile *myLogFile, QWidget *parent)
     #else
         , sVideoPlayer(QString("/usr/bin/ffplay"))
     #endif
+    , pBtServer(nullptr)
 {
     qApp->installEventFilter(this);
 
