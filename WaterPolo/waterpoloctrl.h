@@ -70,6 +70,7 @@ private slots:
     void onScoreIncrement(int iTeam);
     void onScoreDecrement(int iTeam);
     void onTeamTextChanged(QString sText, int iTeam);
+    void onTeamTextEditDone();
     void onButtonChangeFieldClicked();
     void onButtonNewPeriodClicked();
     void onButtonNewGameClicked();

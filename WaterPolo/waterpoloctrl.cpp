@@ -598,6 +598,8 @@ WaterPoloCtrl::setEventHandlers() {
     for(int iTeam=0; iTeam <2; iTeam++) {
         connect(pTeamName[iTeam], SIGNAL(teamTextChanged(QString,int)),
                 this, SLOT(onTeamTextChanged(QString,int)));
+        connect(pTeamName[iTeam], SIGNAL(editDone()),
+                (this, SLOT(onTeamTextEditDone())));
         connect(pTimeoutIncrement[iTeam], SIGNAL(buttonClicked(int)),
                 this, SLOT(onTimeOutIncrement(int)));
         connect(pTimeoutDecrement[iTeam], SIGNAL(buttonClicked(int)),
@@ -834,6 +836,11 @@ WaterPoloCtrl::onTeamTextChanged(QString sText, int iTeam) {
     if(pBtServer) pBtServer->sendMessage(sMessage);
     sText = QString("team%1/name").arg(iTeam+1, 1);
     pSettings->setValue(sText, gsArgs.sTeam[iTeam]);
+}
+
+
+void
+WaterPoloCtrl::onTeamTextEditDone() {
     changeFocus();
 }
 
