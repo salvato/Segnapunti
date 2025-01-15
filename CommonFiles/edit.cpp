@@ -67,3 +67,15 @@ Edit::onTextChanged(QString sText) {
     emit teamTextChanged(std::move(sText), myTeam);
 }
 
+
+void
+Edit::keyPressEvent(QKeyEvent* event) {
+    if ((event->key() == Qt::Key_Tab)    ||
+        (event->key() == Qt::Key_Return) ||
+        (event->key() == Qt::Key_Enter))
+    {
+        emit editDone();
+        return;
+    }
+    QLineEdit::keyPressEvent(event);
+}
