@@ -943,20 +943,6 @@ WaterPoloCtrl::startNewPeriod() {
     pCountStop->setDisabled(true);
     QString sText = QString("%1").arg(iPeriod);
     pPeriodEdit->setText(sText);
-    if(iPeriod == 3) { // Le squadre compresi i giocatori, allenatori e dirigenti,
-                       // cambiano campo prima dell’inizio del 3° tempo.
-        // Exchange team's order in the field
-        QString sText = gsArgs.sTeam[0];
-        gsArgs.sTeam[0] = gsArgs.sTeam[1];
-        gsArgs.sTeam[1] = sText;
-        pTeamName[0]->setText(gsArgs.sTeam[0]);
-        pTeamName[1]->setText(gsArgs.sTeam[1]);
-
-        sText = gsArgs.sTeamLogoFilePath[0];
-        gsArgs.sTeamLogoFilePath[0] = gsArgs.sTeamLogoFilePath[1];
-        gsArgs.sTeamLogoFilePath[1] = sText;
-    }
-
     for(int iTeam=0; iTeam<2; iTeam++) {
         iTimeout[iTeam] = 0;
         sText = QString("%1").arg(iTimeout[iTeam], 1);
@@ -971,6 +957,12 @@ WaterPoloCtrl::startNewPeriod() {
     }
     else
         pPeriodEdit->setStyleSheet("background-color: rgba(0, 0, 0, 0);color:yellow; border: none");
+    if(iPeriod == 3) { // Le squadre compresi i giocatori, allenatori e dirigenti,
+                       // cambiano campo prima dell’inizio del 3° tempo.
+        // Exchange team's order in the field
+        exchangeField();
+    }
+
     remainingMilliSeconds = gsArgs.iTimeDuration * 60000;
     runMilliSeconds = 0;
 
