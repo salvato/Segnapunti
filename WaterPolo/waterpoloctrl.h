@@ -65,8 +65,7 @@ private slots:
     void closeEvent(QCloseEvent*);
     void onTimeOutIncrement(int iTeam);
     void onTimeOutDecrement(int iTeam);
-    void onCountStart(int iTeam);
-    void onCountStop(int iTeam);
+    void onCountStartStop(int iTeam);
     void onScoreIncrement(int iTeam);
     void onScoreDecrement(int iTeam);
     void onTeamTextChanged(QString sText, int iTeam);
@@ -103,8 +102,7 @@ private:
     Button*         pTimeoutDecrement[2]{};
     Button*         pScoreIncrement[2]{};
     Button*         pScoreDecrement[2]{};
-    Button*         pCountStart{};
-    Button*         pCountStop{};
+    Button*         pCountStartStop{};
     QLabel*         pTimeoutLabel{};
     QLabel*         pScoreLabel{};
     QLabel*         pPeriodLabel{};

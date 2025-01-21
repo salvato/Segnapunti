@@ -79,7 +79,6 @@ WaterPoloCtrl::WaterPoloCtrl(QFile *myLogFile, QWidget *parent)
     updateTimer.setTimerType(Qt::PreciseTimer);
 
     setEventHandlers();
-    pCountStop->setDisabled(true);
     startTimer.setSingleShot(true);
     startTimer.start(100);
 }
@@ -116,7 +115,7 @@ WaterPoloCtrl::resizeEvent(QResizeEvent *event) {
 
 void
 WaterPoloCtrl::changeFocus() {
-    pCountStart->setFocus();
+    pCountStartStop->setFocus();
 }
 
 
@@ -258,9 +257,8 @@ WaterPoloCtrl::CreateGamePanel() {
     iRow += 2;
     gamePanel->addWidget(pPeriodLabel, iRow, 0, 1, 3);
 
-    gamePanel->addWidget(pCountStart, iRow, 4, 3, 1, Qt::AlignRight|Qt::AlignVCenter);
-    gamePanel->addWidget(pTimeEdit,   iRow, 5, 3, 2, Qt::AlignVCenter);
-    gamePanel->addWidget(pCountStop,  iRow, 7, 3, 1, Qt::AlignLeft|Qt::AlignVCenter);
+    gamePanel->addWidget(pCountStartStop, iRow, 4, 3, 1, Qt::AlignRight|Qt::AlignVCenter);
+    gamePanel->addWidget(pTimeEdit,       iRow, 5, 3, 3, Qt::AlignRight|Qt::AlignVCenter);
     iRow += 1;
     //gamePanel->addWidget(pPeriodDecrement, iRow, 0, 2, 1, Qt::AlignHCenter|Qt::AlignVCenter);
     gamePanel->addWidget(pPeriodEdit,      iRow, 1, 2, 1, Qt::AlignHCenter|Qt::AlignVCenter);
@@ -562,15 +560,15 @@ WaterPoloCtrl::buildControls() {
     QIcon ButtonIcon;
     pixmap.load(":/ButtonIcons/Go.png");
     ButtonIcon.addPixmap(pixmap);
-    pCountStart = new Button("", 0);
-    pCountStart->setIcon(ButtonIcon);
-    pCountStart->setIconSize(pixmap.rect().size());
+    pCountStartStop = new Button("", 0);
+    pCountStartStop->setIcon(ButtonIcon);
+    pCountStartStop->setIconSize(pixmap.rect().size());
 
-    pixmap.load(":/ButtonIcons/StopTime.png");
-    ButtonIcon.addPixmap(pixmap);
-    pCountStop = new Button("", 0);
-    pCountStop->setIcon(ButtonIcon);
-    pCountStop->setIconSize(pixmap.rect().size());
+    // pixmap.load(":/ButtonIcons/StopTime.png");
+    // ButtonIcon.addPixmap(pixmap);
+    // pCountStop = new Button("", 0);
+    // pCountStop->setIcon(ButtonIcon);
+    // pCountStop->setIconSize(pixmap.rect().size());
 
     // Time Count
     QString sRemainingTime;
@@ -610,10 +608,8 @@ WaterPoloCtrl::setEventHandlers() {
                 this, SLOT(onScoreDecrement(int)));
     }
     // Start/Stop Count
-    connect(pCountStart, SIGNAL(buttonClicked(int)),
-            this, SLOT(onCountStart(int)));
-    connect(pCountStop, SIGNAL(buttonClicked(int)),
-            this, SLOT(onCountStop(int)));
+    connect(pCountStartStop, SIGNAL(buttonClicked(int)),
+            this, SLOT(onCountStartStop(int)));
     // Time editing
     connect(pTimeEdit, SIGNAL(mousePressed()),
             this, SLOT(onGameTimeChanging()));
@@ -661,7 +657,7 @@ WaterPoloCtrl::onGameTimeChanging() {
                                              .arg(minutes, 1)
                                              .arg(seconds, 2, 10, QChar('0'));
                 pTimeEdit->setText(sRemainingTime);
-                pCountStart->setEnabled(true);
+                pCountStartStop->setEnabled(true);
                 QString sMessage = QString("<time>%1</time>")
                                        .arg(sRemainingTime);
                 if(pBtServer) pBtServer->sendMessage(sMessage);
@@ -680,8 +676,7 @@ WaterPoloCtrl::onTimeUpdate() {
         currentMilli += runMilliSeconds;
         qint64 timeToStop = remainingMilliSeconds-currentMilli;
         if(timeToStop<=0) {
-            pCountStart->setDisabled(true);
-            pCountStop->setDisabled(true);
+            pCountStartStop->setDisabled(true);
             timeToStop = 0;
             tempoTimer.invalidate();
             enableUi();
@@ -752,32 +747,38 @@ WaterPoloCtrl::onTimeOutDecrement(int iTeam) {
 
 
 void
-WaterPoloCtrl::onCountStart(int iTeam) {
+WaterPoloCtrl::onCountStartStop(int iTeam) {
     Q_UNUSED(iTeam)
-    tempoTimer.restart();
-    myStatus = running;
-    pCountStart->setDisabled(true);
-    pCountStop->setEnabled(true);
-    disableUi();
-    QString sMessage = QString("<startT>%1</startT>").arg(0, 1);
-    if(pBtServer) pBtServer->sendMessage(sMessage);
-    pCountStop->setFocus();
-}
-
-
-void
-WaterPoloCtrl::onCountStop(int iTeam) {
-    Q_UNUSED(iTeam)
-    runMilliSeconds += tempoTimer.elapsed();
-    tempoTimer.invalidate();
-    myStatus = showPanel;
-    pCountStart->setEnabled(true);
-    pCountStop->setDisabled(true);
-    pTimeEdit->setEnabled(true);
-    enableUi();
-    QString sMessage = QString("<stopT>%1</stopT>").arg(0, 1);
-    if(pBtServer) pBtServer->sendMessage(sMessage);
-    changeFocus();
+    QPixmap pixmap;
+    QIcon ButtonIcon;
+    if(myStatus == running) {
+        runMilliSeconds += tempoTimer.elapsed();
+        tempoTimer.invalidate();
+        myStatus = showPanel;
+        pixmap.load(":/ButtonIcons/Go.png");
+        ButtonIcon.addPixmap(pixmap);
+        pCountStartStop->setIcon(ButtonIcon);
+        pCountStartStop->setIconSize(pixmap.rect().size());
+        pCountStartStop->setEnabled(true);
+        pTimeEdit->setEnabled(true);
+        enableUi();
+        QString sMessage = QString("<stopT>%1</stopT>").arg(0, 1);
+        if(pBtServer) pBtServer->sendMessage(sMessage);
+        changeFocus();
+    }
+    else {
+        tempoTimer.restart();
+        myStatus = running;
+        pixmap.load(":/ButtonIcons/StopTime.png");
+        ButtonIcon.addPixmap(pixmap);
+        pCountStartStop->setIcon(ButtonIcon);
+        pCountStartStop->setIconSize(pixmap.rect().size());
+        pCountStartStop->setEnabled(true);
+        disableUi();
+        QString sMessage = QString("<startT>%1</startT>").arg(0, 1);
+        if(pBtServer) pBtServer->sendMessage(sMessage);
+        pCountStartStop->setFocus();
+    }
 }
 
 
@@ -939,8 +940,7 @@ WaterPoloCtrl::onButtonNewPeriodClicked() {
 void
 WaterPoloCtrl::startNewPeriod() {
     iPeriod++;
-    pCountStart->setEnabled(true);
-    pCountStop->setDisabled(true);
+    pCountStartStop->setEnabled(true);
     QString sText = QString("%1").arg(iPeriod);
     pPeriodEdit->setText(sText);
     for(int iTeam=0; iTeam<2; iTeam++) {
@@ -1006,7 +1006,7 @@ WaterPoloCtrl::onButtonNewGameClicked() {
         pTimeoutIncrement[iTeam]->setEnabled(true);
         pScoreDecrement[iTeam]->setEnabled(false);
         pScoreIncrement[iTeam]->setEnabled(true);
-        pCountStart->setEnabled(true);
+        pCountStartStop->setEnabled(true);
     }
     iPeriod = 1;
     pPeriodEdit->setText(QString("%1").arg(iPeriod));
@@ -1051,12 +1051,12 @@ WaterPoloCtrl::processBtMessage(QString sMessage) {
 
     sToken = XML_Parse(sMessage, "startT");
     if(sToken != sNoData) {
-        onCountStart(0);
+        onCountStartStop(0);
     }// start Time
 
     sToken = XML_Parse(sMessage, "stopT");
     if(sToken != sNoData) {
-        onCountStop(0);
+        onCountStartStop(0);
     }// start Time
 
     sToken = XML_Parse(sMessage, "team0");
@@ -1155,7 +1155,7 @@ WaterPoloCtrl::processBtMessage(QString sMessage) {
                                              .arg(seconds, 2, 10, QChar('0'));
                 pTimeEdit->setText(sRemainingTime);
                 pWaterPoloPanel->setTime(sRemainingTime);
-                pCountStart->setEnabled(true);
+                pCountStartStop->setEnabled(true);
                 QString sMessage = QString("<time>%1</time>")
                                        .arg(sRemainingTime);
                 if(pBtServer) pBtServer->sendMessage(sMessage);
