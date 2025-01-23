@@ -3,7 +3,13 @@
 Un insieme di programmi per gestire tabelloni segnapunti di varie discipline sportive
 (Attualmente ***Volley*** e ***Pallanuoto***)
 
+### Volley
+
 ![Volley Panel](./Readme_Images/Panel_Volley.png)
+
+### Pallanuoto
+
+![Waterpolo Panel](./Readme_Images/Panel_WP.png)
 
 Il programma prevede l'uso di un **PC** con la possibilità di collegare un secondo schermo che deve essere configurato come ***"estensione"*** dello schermo principale.
 
