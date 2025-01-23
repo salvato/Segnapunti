@@ -158,4 +158,4 @@ DISTFILES += \
     Waterpolo.odt \
     Waterpolo.pdf
 
-windows:RC_ICONS += ../CommonFiles/Loghi/Logo.ico
+windows:RC_ICONS += ../CommonFiles/Loghi/water-polo-ball.ico

@@ -89,5 +89,6 @@
         <file>ButtonIcons/water-polo-ball.png</file>
         <file>ButtonIcons/NewPeriod.png</file>
         <file>ButtonIcons/Exchange.png</file>
+        <file>../CommonFiles/Loghi/water-polo-ball.ico</file>
     </qresource>
 </RCC>
