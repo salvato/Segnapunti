@@ -50,7 +50,7 @@ WaterPoloCtrl::WaterPoloCtrl(QFile *myLogFile, QWidget *parent)
     , lastS(-1)
 {
     setWindowTitle("Waterpolo Controller - © Gabriele Salvato (2025)");
-    setWindowIcon(QIcon(":/../CommonFiles/Loghi/Logo.ico"));
+    setWindowIcon(QIcon(":/../CommonFiles/Loghi/water-polo-ball.ico"));
 
     panelPalette = QWidget::palette();
     panelGradient = QLinearGradient(0.0, 0.0, 0.0, height());
