@@ -55,7 +55,7 @@ BtServer::startServer(const QBluetoothAddress& localAdapter) {
     serviceInfo.setAttribute(QBluetoothServiceInfo::ServiceName, tr("Bt Panel Server"));
     serviceInfo.setAttribute(QBluetoothServiceInfo::ServiceDescription,
                              tr("Bluetooth Panel server"));
-    serviceInfo.setAttribute(QBluetoothServiceInfo::ServiceProvider, tr("qt-project.org"));
+    serviceInfo.setAttribute(QBluetoothServiceInfo::ServiceProvider, tr("panel-project.org"));
 
     // Service UUID set
     serviceInfo.setServiceUuid(QBluetoothUuid(serviceUuid));
