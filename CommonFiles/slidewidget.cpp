@@ -335,17 +335,20 @@ SlideWidget::initializeGL() {
 void
 SlideWidget::initShaders() {
     QStringList fShaderList = QStringList({
+#ifndef RPI3
+                                          "fFilmBurn",
+                                          "fDoomScreen",
+                                          "fPolkaDotsCurtain",
+                                          "fSwap",
+#endif
                                           "fBookFlip",
                                           "fAngular",
                                           "fBounce",
-                                          "fFilmBurn",
-                                          "fDoomScreen",
                                           "fWaterDrop",
                                           "fFlyEye",
                                           "fMorph",
                                           "fPerlin",
                                           "fPinwheel",
-                                          "fPolkaDotsCurtain",
                                           "fPowerKaleido",
                                           "fInvertedPageCurl",
                                           "fDisplacement",
@@ -359,7 +362,6 @@ SlideWidget::initShaders() {
                                           "fMultiply_blend",
                                           "fPixelize",
                                           "fWind",
-                                          "fSwap",
                                           "fCrosswarp"
     });
     for(int i=0; i<fShaderList.count(); i++) {
