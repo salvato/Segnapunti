@@ -34,7 +34,11 @@ main(int argc, char *argv[]) {
     QSurfaceFormat format;
 #ifdef Q_PROCESSOR_ARM_64
     format.setRenderableType(QSurfaceFormat::OpenGLES);
+#ifdef RPI3 // To be defined in .pro file for Raspberry Pi3
+    format.setVersion(2, 0);
+#else
     format.setVersion(3, 1);
+#endif
 #endif
     format.setDepthBufferSize(32);
     format.setSamples(4);

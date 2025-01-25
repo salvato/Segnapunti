@@ -88,5 +88,47 @@
         <file>../CommonFiles/ButtonIcons/Ball1.png</file>
         <file>../CommonFiles/ButtonIcons/Ball2.png</file>
         <file>../CommonFiles/ButtonIcons/Off.png</file>
+        <file>../CommonFiles/ShadersRPi3/fAngular.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fAvatar.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fBookFlip.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fBounce.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fCircleopen.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fCrosshatch.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fCrosswarp.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fDebug_quad.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fDepth.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fDisplacement.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fDoomScreen.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fDreamy.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fFade.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fFilmBurn.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fFlyEye.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fGlyphs.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fInvertedPageCurl.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fMain.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fMorph.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fMultiply_blend.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fParticle.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fPerlin.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fPinwheel.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fPixelize.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fPolkaDotsCurtain.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fPowerKaleido.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fPrefix.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fRace.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fRadial.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fRipple.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fSwap.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fSwirl.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fText.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fWaterDrop.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/fWind.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/vDebug_quad.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/vDepth.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/vGlyphs.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/vParticle.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/vRace.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/vShader.glsl</file>
+        <file>../CommonFiles/ShadersRPi3/vText.glsl</file>
     </qresource>
 </RCC>

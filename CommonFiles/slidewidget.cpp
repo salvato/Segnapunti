@@ -365,7 +365,11 @@ SlideWidget::initShaders() {
     for(int i=0; i<fShaderList.count(); i++) {
         QString sBaseDir;
 #ifdef __ARM_ARCH
+    #ifdef RPI3
+        sBaseDir = "/CommonFiles/ShadersRPi3";
+    #else
         sBaseDir = "/CommonFiles/ShadersRPi4";
+    #endif
 #else
         sBaseDir = "/CommonFiles/Shaders";
 #endif
