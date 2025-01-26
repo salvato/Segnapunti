@@ -689,6 +689,9 @@ VolleyController::onScoreIncrement(int iTeam) {
                    .arg(iScore[iTeam], 2)
                    .arg(iTeam,1);
     pBtServer->sendMessage(sMessage);
+    sMessage = QString("<servizio>%1</servizio>")
+                   .arg(iServizio, 1);
+    pBtServer->sendMessage(sMessage);
     QString sText;
     sText = QString("%1").arg(iScore[iTeam], 2);
     pScoreEdit[iTeam]->setText(sText);
@@ -722,6 +725,9 @@ VolleyController::onScoreDecrement(int iTeam) {
                            .arg(iTeam,1)
                            .arg(iScore[iTeam], 2)
                            .arg(iTeam,1);
+    pBtServer->sendMessage(sMessage);
+    sMessage = QString("<servizio>%1</servizio>")
+                   .arg(iServizio, 1);
     pBtServer->sendMessage(sMessage);
     QString sText;
     sText = QString("%1").arg(iScore[iTeam], 2);
