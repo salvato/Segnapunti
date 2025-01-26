@@ -62,6 +62,8 @@ SlideWidget::SlideWidget()
 
     iCurrentSlide    = 0;
 
+    setCursor(Qt::BlankCursor);
+
     timerSteady.setSingleShot(true);
     connect(&timerAnimate, SIGNAL(timeout()),
             this, SLOT(ontimerAnimateEvent()));
