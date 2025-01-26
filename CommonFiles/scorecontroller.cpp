@@ -58,9 +58,6 @@ ScoreController::ScoreController(QFile *myLogFile, QWidget *parent)
     pSpotButtonsLayout = CreateSpotButtons();
     connectButtonSignals();
 
-    pMySlideWindow->showFullScreen();
-    pMySlideWindow->hide();
-
     initBluetooth();
 
     myStatus = showPanel;
