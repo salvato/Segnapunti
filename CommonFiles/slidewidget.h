@@ -65,6 +65,7 @@ private:
     void initGeometry();
     void drawGeometry(QOpenGLShaderProgram *program);
     bool updateSlideList();
+    void cleanOpenGL();
 
 private:
     struct VertexData {

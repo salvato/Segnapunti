@@ -73,24 +73,29 @@ SlideWidget::SlideWidget()
 
 
 SlideWidget::~SlideWidget() {
-    makeCurrent();
-    if(pTexture0) delete pTexture0;
-    pTexture0 = nullptr;
-    if(pTexture1) delete pTexture1;
-    pTexture1 = nullptr;
-    doneCurrent();
+    cleanOpenGL();
 }
 
 
 void
 SlideWidget::closeEvent(QCloseEvent* event) {
+    cleanOpenGL();
+    event->accept();
+}
+
+
+void
+SlideWidget::cleanOpenGL() {
     makeCurrent();
     if(pTexture0) delete pTexture0;
     pTexture0 = nullptr;
     if(pTexture1) delete pTexture1;
     pTexture1 = nullptr;
+    for(int i=0; i<pPrograms.count(); i++)
+        delete pPrograms.at(i);
+    pPrograms.clear();
+    arrayBuf.destroy();
     doneCurrent();
-    event->accept();
 }
 
 
