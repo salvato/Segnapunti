@@ -48,11 +48,6 @@ BtClient::startClient(const QBluetoothServiceInfo &remoteService) {
     // Connect to service
     pSocket = new QBluetoothSocket(QBluetoothServiceInfo::RfcommProtocol);
     // qDebug() << "Create socket";
-    pSocket->connectToService(remoteService);
-    // qDebug() << "ConnectToService done";
-#ifdef BT_DEBUG
-    qCritical() << "Socket State:" << pSocket->state();
-#endif
 
     connect(pSocket, &QBluetoothSocket::readyRead,
             this, &BtClient::readSocket);
@@ -62,6 +57,12 @@ BtClient::startClient(const QBluetoothServiceInfo &remoteService) {
             &BtClient::disconnected);
     connect(pSocket, &QBluetoothSocket::errorOccurred, this,
             &BtClient::onSocketErrorOccurred);
+
+    pSocket->connectToService(remoteService);
+    // qDebug() << "ConnectToService done";
+#ifdef BT_DEBUG
+    qCritical() << "Socket State:" << pSocket->state();
+#endif
 }
 
 
