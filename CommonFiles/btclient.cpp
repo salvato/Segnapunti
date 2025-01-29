@@ -24,8 +24,6 @@ BtClient::startClient(const QBluetoothAddress& address, const QBluetoothUuid uui
     // Connect to service
     pSocket = new QBluetoothSocket(QBluetoothServiceInfo::RfcommProtocol);
     // qDebug() << "Create socket";
-    pSocket->connectToService(address, uuid, QBluetoothSocket::ReadWrite);
-    // qDebug() << "ConnectToService done";
 
     connect(pSocket, &QBluetoothSocket::readyRead,
             this, &BtClient::readSocket);
@@ -35,6 +33,9 @@ BtClient::startClient(const QBluetoothAddress& address, const QBluetoothUuid uui
             &BtClient::disconnected);
     connect(pSocket, &QBluetoothSocket::errorOccurred, this,
             &BtClient::onSocketErrorOccurred);
+
+    pSocket->connectToService(address, uuid, QBluetoothSocket::ReadWrite);
+    // qDebug() << "ConnectToService done";
 }
 
 
@@ -124,4 +125,13 @@ BtClient::connected() {
     qCritical() << "Connected to:" << pSocket->peerName();
 #endif
     emit connected(pSocket->peerName());
+}
+
+
+QBluetoothAddress
+BtClient::getPeerAddress() {
+    if(pSocket)
+        return pSocket->peerAddress();
+    else
+        return QBluetoothAddress();
 }

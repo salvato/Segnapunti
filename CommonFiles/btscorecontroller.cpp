@@ -317,11 +317,11 @@ BtScoreController::tryConnectLastKnown(QBluetoothAddress address) {
     qCritical() << "BtUUID   :" << uuid.toString();
 #endif
     pPanelClient = new BtClient(this);
-    pPanelClient->startClient(address, uuid);
     connect(pPanelClient, SIGNAL(connected(QString)),
             this, SLOT(onPanelClientConnected(QString)));
     connect(pPanelClient, SIGNAL(socketErrorOccurred(QString)),
             this, SLOT(onPanelClientSocketError(QString)));
+    pPanelClient->startClient(address, uuid);
 }
 
 
@@ -340,11 +340,11 @@ BtScoreController::tryPaired() {
     QBluetoothAddress address(pairedDevices.at(currentDevice));
     QBluetoothUuid uuid(serviceUuid);
     pPanelClient = new BtClient(this);
-    pPanelClient->startClient(address, uuid);
     connect(pPanelClient, SIGNAL(connected(QString)),
             this, SLOT(onPanelClientConnected(QString)));
     connect(pPanelClient, SIGNAL(socketErrorOccurred(QString)),
             this, SLOT(onPanelClientSocketError(QString)));
+    pPanelClient->startClient(address, uuid);
 }
 
 
@@ -494,6 +494,10 @@ BtScoreController::serviceDiscovered(const QBluetoothServiceInfo &serviceInfo) {
     pBtDiscoveryAgent->disconnect();
     pBtDiscoveryAgent->stop();
     pSettings->setValue("ServerAddress", serviceInfo.device().address().toString());
+#ifdef BT_DEBUG
+    qCritical() << __FUNCTION__ << __LINE__;
+    qCritical() << "Found ServerAddress:" << pSettings->value("ServerAddress", "").toString();
+#endif
     pSettings->setValue("ServerUUID", serviceInfo.serviceUuid().toString());
     QBluetoothAddress address(serviceInfo.device().address());
     QString remoteName;
@@ -595,6 +599,11 @@ BtScoreController::onPanelClientConnected(QString sName) {
 #ifdef BT_DEBUG
     qCritical() << __FUNCTION__ << __LINE__;
     qCritical() << "Connected to" << sName;
+#endif
+    pSettings->setValue("ServerAddress", pPanelClient->getPeerAddress().toString());
+#ifdef BT_DEBUG
+    qCritical() << __FUNCTION__ << __LINE__;
+    qCritical() << "Found ServerAddress:" << pSettings->value("ServerAddress", "").toString();
 #endif
     Q_UNUSED(sName)
     stopBtDiscovery();
