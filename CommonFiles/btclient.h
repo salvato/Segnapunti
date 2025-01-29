@@ -16,6 +16,7 @@ public:
     void startClient(const QBluetoothAddress& address, const QBluetoothUuid uuid);
     void startClient(const QBluetoothServiceInfo &remoteService);
     void stopClient();
+    QBluetoothAddress getPeerAddress();
 
 public slots:
     void sendMessage(const QString &message);
