@@ -28,6 +28,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QDateTime>
 #include <QDebug>
 #include <QRegularExpression>
+#include <QSerialPortInfo>
+#include <QSerialPort>
+#include <QThread>
 
 #include "../CommonFiles/btserver.h"
 #include "../CommonFiles/edit.h"
@@ -48,6 +51,7 @@ WaterPoloCtrl::WaterPoloCtrl(QFile *myLogFile, QWidget *parent)
     , runMilliSeconds(0)
     , lastM(-1)
     , lastS(-1)
+    , alarmDuration(3000)
 {
     setWindowTitle("Waterpolo Controller - © Gabriele Salvato (2025)");
     setWindowIcon(QIcon(":/../CommonFiles/Loghi/water-polo-ball.ico"));
@@ -79,6 +83,19 @@ WaterPoloCtrl::WaterPoloCtrl(QFile *myLogFile, QWidget *parent)
     updateTimer.setTimerType(Qt::PreciseTimer);
 
     setEventHandlers();
+
+    isAlarmFound = false;
+#ifndef Q_OS_ANDROID
+    // Alarm connected on Serial Port
+    baudRate = QSerialPort::Baud115200;
+    waitTimeout = 1000;
+    responseData.clear();
+    isAlarmFound = connectToAlarm();
+    alarmDurationTimer.setSingleShot(true);
+    connect(&alarmDurationTimer, SIGNAL(timeout()),
+            this, SLOT(onStopAlarm()));
+#endif
+
     pCountStop->setDisabled(true);
     startTimer.setSingleShot(true);
     startTimer.start(100);
@@ -90,12 +107,79 @@ WaterPoloCtrl::closeEvent(QCloseEvent *event) {
     updateTimer.disconnect();
     updateTimer.stop();
     SaveSettings();
+#ifndef Q_OS_ANDROID
+    if(serialPort.isOpen()) {
+#ifdef LOG_VERBOSE
+        logMessage(logFile,
+                   Q_FUNC_INFO,
+                   QString("Closing Alarm Connection"));
+#endif
+        // writeAlarmSimpleCommand(char(StopSending));
+        // serialPort.waitForBytesWritten(1000);// in msec
+        // QThread::sleep(1);// In sec. Give to Alarm time to react
+        serialPort.clear();
+        serialPort.close();
+    }
+#endif
     ScoreController::closeEvent(event);
     if(pWaterPoloPanel) {
         pWaterPoloPanel->deleteLater();
     }
     event->accept();
 }
+
+
+#ifndef Q_OS_ANDROID
+
+bool
+WaterPoloCtrl::connectToAlarm() {
+    // Get a list of available serial ports
+    serialPorts = QSerialPortInfo::availablePorts();
+
+    // Remove from the list NON tty or COM and already opened devices
+    for(int i=0; i<serialPorts.count(); i++) {
+        serialPortinfo = serialPorts.at(i);
+#ifdef Q_OS_WINDOWS
+        if(!serialPortinfo.portName().contains("COM"))
+#else
+        if(!serialPortinfo.portName().contains("tty"))
+#endif
+            serialPorts.removeAt(i);
+        serialPort.setPortName(serialPortinfo.portName());
+        if(serialPort.isOpen())
+            serialPorts.removeAt(i);
+    }
+
+    // Do we have still serial ports ?
+    if(serialPorts.isEmpty()) {
+        return false;
+    }
+
+    // Yes we have serial ports available:
+    // Search for the one connected to Alarm
+    waitTimeout = 3;
+
+    for(currentPort=0; currentPort<serialPorts.count(); currentPort++) {
+        serialPortinfo = serialPorts.at(currentPort);
+        serialPort.setPortName(serialPortinfo.portName());
+        serialPort.setBaudRate(baudRate);
+        serialPort.setDataBits(QSerialPort::Data8);
+        if(serialPort.open(QIODevice::ReadWrite)) {
+            // Arduino will be reset upon opening serial connection
+            // so give them time to set it up before communicating.
+            QThread::sleep(waitTimeout);// In sec.
+            serialPort.write(QByteArray().append(ENQUIRY));
+            if(serialPort.waitForReadyRead(500)) {
+                responseData.append(serialPort.readAll());
+                if(responseData.contains(quint8(ACK)))
+                    return true;
+            }
+        }
+    }
+    return false;
+}
+
+#endif
 
 
 void
@@ -684,6 +768,10 @@ WaterPoloCtrl::onTimeUpdate() {
             pCountStop->setDisabled(true);
             timeToStop = 0;
             tempoTimer.invalidate();
+            if(isAlarmFound) {
+                serialPort.write(QByteArray().append(BELL));
+                alarmDurationTimer.start(alarmDuration);
+            }
             enableUi();
         }
         QString sRemainingTime;
@@ -1165,3 +1253,7 @@ WaterPoloCtrl::processBtMessage(QString sMessage) {
 }
 
 
+void
+WaterPoloCtrl::onStopAlarm() {
+    serialPort.write(QByteArray().append(CANCEL));
+}
