@@ -26,7 +26,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QTimer>
 #include <QElapsedTimer>
-
+#include <QSerialPort>
+#include <QSerialPortInfo>
 
 QT_FORWARD_DECLARE_CLASS(QSettings)
 QT_FORWARD_DECLARE_CLASS(Edit)
@@ -57,6 +58,9 @@ protected:
     void          buildFontSizes();
     void          SaveStatus();
     void          GeneralSetup();
+#ifndef Q_OS_ANDROID
+    bool          connectToAlarm();
+#endif
 
 private slots:
     void onAppStart();
@@ -75,6 +79,7 @@ private slots:
     void onButtonNewPeriodClicked();
     void onButtonNewGameClicked();
     void onChangePanelOrientation(PanelOrientation orientation);
+    void onStopAlarm();
 
 private:
     void          buildControls();
@@ -123,8 +128,28 @@ private:
     QElapsedTimer   tempoTimer;
     qint64          runMilliSeconds;
     qint64          remainingMilliSeconds;
-    int lastM;
-    int lastS;
+    int             lastM;
+    int             lastS;
+    bool            isAlarmFound;
+#ifndef Q_OS_ANDROID
+    QByteArray             requestData;/*!< The string sent to the Arduino */
 
+    enum commands {
+        ENQUIRY        = char(0x05),
+        ACK            = char(0x06),
+        BELL           = char(0x07),
+        CANCEL         = char(0x18)
+    };
+
+    QSerialPort::BaudRate  baudRate;
+    QSerialPort            serialPort;
+    QSerialPortInfo        serialPortinfo;
+    QList<QSerialPortInfo> serialPorts;
+    int                    currentPort;
+    int                    waitTimeout;
+    QByteArray             responseData;
+    QTimer                 alarmDurationTimer;
+    int                    alarmDuration;
+#endif
 };
 

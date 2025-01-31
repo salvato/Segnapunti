@@ -19,6 +19,7 @@ QT += widgets
 QT += opengl
 QT += openglwidgets
 QT += bluetooth
+QT += serialport
 
 CONFIG += c++17
 
