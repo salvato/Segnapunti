@@ -13,13 +13,20 @@
 #You should have received a copy of the GNU General Public License
 #along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
+message(QMAKE_HOST.arch variable is $${QMAKE_HOST.arch})
+
+
 QT += core
 QT += gui
 QT += widgets
 QT += opengl
 QT += openglwidgets
 QT += bluetooth
-QT += serialport
+!contains(QMAKE_HOST.arch, aarch64):{
+    QT += serialport
+}
+
 
 CONFIG += c++17
 
@@ -58,6 +65,13 @@ HEADERS += \
     waterpoloapp.h \
     waterpoloctrl.h \
     waterpolopanel.h
+
+
+contains(QMAKE_HOST.arch, aarch64):
+{
+    LIBS += -lgpiod
+    message("Host is Raspberry")
+}
 
 
 # Default rules for deployment.
