@@ -23,7 +23,8 @@ QT += widgets
 QT += opengl
 QT += openglwidgets
 QT += bluetooth
-!contains(QMAKE_HOST.arch, aarch64):{
+contains(QMAKE_HOST.arch, x86_64):{
+    message("Using Serial Port")
     QT += serialport
 }
 
@@ -67,10 +68,9 @@ HEADERS += \
     waterpolopanel.h
 
 
-contains(QMAKE_HOST.arch, aarch64):
-{
+contains(QMAKE_HOST.arch, aarch64):{
     LIBS += -lgpiod
-    message("Host is Raspberry")
+    message("Host is Raspberry. QMAKE_HOST.arch=$${QMAKE_HOST.arch}")
 }
 
 
