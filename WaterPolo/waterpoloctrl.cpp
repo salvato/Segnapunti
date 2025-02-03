@@ -30,8 +30,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QRegularExpression>
 
 #ifndef __ARM_ARCH
-#include <QSerialPortInfo>
-#include <QSerialPort>
 #include <QThread>
 #endif
 
@@ -54,6 +52,7 @@ WaterPoloCtrl::WaterPoloCtrl(QFile *myLogFile, QWidget *parent)
     , runMilliSeconds(0)
     , lastM(-1)
     , lastS(-1)
+    , alarmIO(24)
     , alarmDuration(3000)
 {
     setWindowTitle("Waterpolo Controller - © Gabriele Salvato (2025)");
@@ -91,7 +90,15 @@ WaterPoloCtrl::WaterPoloCtrl(QFile *myLogFile, QWidget *parent)
 
 #ifndef Q_OS_ANDROID
 #ifdef __ARM_ARCH
-    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    // Open GPIO chip
+    pChip = gpiod_chip_open_by_name(chipname);
+    // Open GPIO lines
+    pLineAlarm = gpiod_chip_get_line(pChip, alarmIO);
+    // Open ALARM line for output
+    gpiod_line_request_output(pLineAlarm, "alarm", 0);
+    // Switch Off the Alarm
+    gpiod_line_set_value(pLineAlarm, 0);
+    isAlarmFound = true;
 #else
     // Alarm connected on Serial Port
     baudRate = QSerialPort::Baud115200;
@@ -128,6 +135,10 @@ WaterPoloCtrl::closeEvent(QCloseEvent *event) {
         serialPort.clear();
         serialPort.close();
     }
+#else
+    // Release lines and chip
+    gpiod_line_release(pLineAlarm);
+    gpiod_chip_close(pChip);
 #endif
 #endif
     ScoreController::closeEvent(event);
@@ -782,7 +793,8 @@ WaterPoloCtrl::onTimeUpdate() {
             if(isAlarmFound) {
 #ifndef Q_OS_ANDROID
 #ifdef __ARM_ARCH
-    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                // Switch On the Alarm
+                gpiod_line_set_value(pLineAlarm, 1);
 #else
                 serialPort.write(QByteArray().append(BELL));
                 alarmDurationTimer.start(alarmDuration);
@@ -1274,7 +1286,8 @@ void
 WaterPoloCtrl::onStopAlarm() {
 #ifndef Q_OS_ANDROID
 #ifdef __ARM_ARCH
-    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    // Switch Off the Alarm
+    gpiod_line_set_value(pLineAlarm, 0);
 #else
     serialPort.write(QByteArray().append(CANCEL));
 #endif
