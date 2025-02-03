@@ -26,8 +26,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QTimer>
 #include <QElapsedTimer>
-#include <QSerialPort>
+#ifndef __ARM_ARCH
 #include <QSerialPortInfo>
+#include <QSerialPort>
+#else
+#include <gpiod.h>
+#endif
 
 QT_FORWARD_DECLARE_CLASS(QSettings)
 QT_FORWARD_DECLARE_CLASS(Edit)
@@ -132,6 +136,7 @@ private:
     int             lastS;
     bool            isAlarmFound;
 #ifndef Q_OS_ANDROID
+#ifndef __ARM_ARCH
     QByteArray             requestData;/*!< The string sent to the Arduino */
 
     enum commands {
@@ -148,6 +153,12 @@ private:
     int                    currentPort;
     int                    waitTimeout;
     QByteArray             responseData;
+#else
+    const char* chipname = "gpiochip0";
+    struct gpiod_chip*     pChip;
+    struct gpiod_line*     pLineAlarm;
+    int                    alarmIO;
+#endif
     QTimer                 alarmDurationTimer;
     int                    alarmDuration;
 #endif

@@ -28,9 +28,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QDateTime>
 #include <QDebug>
 #include <QRegularExpression>
-#include <QSerialPortInfo>
-#include <QSerialPort>
+
+#ifndef __ARM_ARCH
 #include <QThread>
+#endif
 
 #include "../CommonFiles/btserver.h"
 #include "../CommonFiles/edit.h"
@@ -51,7 +52,8 @@ WaterPoloCtrl::WaterPoloCtrl(QFile *myLogFile, QWidget *parent)
     , runMilliSeconds(0)
     , lastM(-1)
     , lastS(-1)
-    , alarmDuration(3000)
+    , alarmIO(24) // GPIO24 pin 18 of the 40 pins connector. See: https://pinout.xyz/
+    , alarmDuration(1000)
 {
     setWindowTitle("Waterpolo Controller - © Gabriele Salvato (2025)");
     setWindowIcon(QIcon(":/../CommonFiles/Loghi/water-polo-ball.ico"));
@@ -85,12 +87,25 @@ WaterPoloCtrl::WaterPoloCtrl(QFile *myLogFile, QWidget *parent)
     setEventHandlers();
 
     isAlarmFound = false;
+
 #ifndef Q_OS_ANDROID
+#ifdef __ARM_ARCH
+    // Open GPIO chip
+    pChip = gpiod_chip_open_by_name(chipname);
+    // Open GPIO lines
+    pLineAlarm = gpiod_chip_get_line(pChip, alarmIO);
+    // Open ALARM line for output
+    gpiod_line_request_output(pLineAlarm, "alarm", 0);
+    // Switch Off the Alarm
+    gpiod_line_set_value(pLineAlarm, 0);
+    isAlarmFound = (pChip != NULL) && (pLineAlarm != NULL);
+#else
     // Alarm connected on Serial Port
     baudRate = QSerialPort::Baud115200;
     waitTimeout = 1000;
     responseData.clear();
     isAlarmFound = connectToAlarm();
+#endif
     alarmDurationTimer.setSingleShot(true);
     connect(&alarmDurationTimer, SIGNAL(timeout()),
             this, SLOT(onStopAlarm()));
@@ -108,18 +123,26 @@ WaterPoloCtrl::closeEvent(QCloseEvent *event) {
     updateTimer.stop();
     SaveSettings();
 #ifndef Q_OS_ANDROID
+#ifndef __ARM_ARCH
     if(serialPort.isOpen()) {
 #ifdef LOG_VERBOSE
         logMessage(logFile,
                    Q_FUNC_INFO,
                    QString("Closing Alarm Connection"));
 #endif
-        // writeAlarmSimpleCommand(char(StopSending));
-        // serialPort.waitForBytesWritten(1000);// in msec
-        // QThread::sleep(1);// In sec. Give to Alarm time to react
+        serialPort.write(QByteArray().append(CANCEL));
+        serialPort.waitForBytesWritten(1000);// in msec
         serialPort.clear();
         serialPort.close();
     }
+#else
+    // Restore line to input
+    gpiod_line_release(pLineAlarm);
+    gpiod_line_request_input(pLineAlarm, "alarm");
+    // Release lines and chip
+    gpiod_line_release(pLineAlarm);
+    gpiod_chip_close(pChip);
+#endif
 #endif
     ScoreController::closeEvent(event);
     if(pWaterPoloPanel) {
@@ -130,6 +153,7 @@ WaterPoloCtrl::closeEvent(QCloseEvent *event) {
 
 
 #ifndef Q_OS_ANDROID
+#ifndef __ARM_ARCH
 
 bool
 WaterPoloCtrl::connectToAlarm() {
@@ -179,6 +203,7 @@ WaterPoloCtrl::connectToAlarm() {
     return false;
 }
 
+#endif
 #endif
 
 
@@ -769,8 +794,15 @@ WaterPoloCtrl::onTimeUpdate() {
             timeToStop = 0;
             tempoTimer.invalidate();
             if(isAlarmFound) {
+#ifndef Q_OS_ANDROID
+                // Switch On the Alarm
+#ifdef __ARM_ARCH
+                gpiod_line_set_value(pLineAlarm, 1);
+#else
                 serialPort.write(QByteArray().append(BELL));
+#endif
                 alarmDurationTimer.start(alarmDuration);
+#endif
             }
             enableUi();
         }
@@ -1255,5 +1287,14 @@ WaterPoloCtrl::processBtMessage(QString sMessage) {
 
 void
 WaterPoloCtrl::onStopAlarm() {
-    serialPort.write(QByteArray().append(CANCEL));
+#ifndef Q_OS_ANDROID
+    if(isAlarmFound) {
+        // Switch Off the Alarm
+#ifdef __ARM_ARCH
+        gpiod_line_set_value(pLineAlarm, 0);
+#else
+        serialPort.write(QByteArray().append(CANCEL));
+#endif
+    }
+#endif
 }
