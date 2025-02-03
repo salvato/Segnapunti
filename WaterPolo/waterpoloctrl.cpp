@@ -52,7 +52,9 @@ WaterPoloCtrl::WaterPoloCtrl(QFile *myLogFile, QWidget *parent)
     , runMilliSeconds(0)
     , lastM(-1)
     , lastS(-1)
+#ifdef __ARM_ARCH
     , alarmIO(24) // GPIO24 pin 18 of the 40 pins connector. See: https://pinout.xyz/
+#endif
     , alarmDuration(1000)
 {
     setWindowTitle("Waterpolo Controller - © Gabriele Salvato (2025)");
