@@ -93,7 +93,7 @@ RemainingTimeDialog::setMinutes(int minutes) {
 
 void
 RemainingTimeDialog::setSeconds(int seconds) {
-    secondsEdit.setText(QString("%1").arg(seconds, 1));
+    secondsEdit.setText(QString("%1").arg(seconds, 2));
 }
 
 

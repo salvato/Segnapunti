@@ -53,7 +53,7 @@ WaterPoloCtrl::WaterPoloCtrl(QFile *myLogFile, QWidget *parent)
     , lastM(-1)
     , lastS(-1)
     , alarmIO(24) // GPIO24 pin 18 of the 40 pins connector. See: https://pinout.xyz/
-    , alarmDuration(3000)
+    , alarmDuration(1000)
 {
     setWindowTitle("Waterpolo Controller - © Gabriele Salvato (2025)");
     setWindowIcon(QIcon(":/../CommonFiles/Loghi/water-polo-ball.ico"));
@@ -105,10 +105,10 @@ WaterPoloCtrl::WaterPoloCtrl(QFile *myLogFile, QWidget *parent)
     waitTimeout = 1000;
     responseData.clear();
     isAlarmFound = connectToAlarm();
+#endif
     alarmDurationTimer.setSingleShot(true);
     connect(&alarmDurationTimer, SIGNAL(timeout()),
             this, SLOT(onStopAlarm()));
-#endif
 #endif
 
     pCountStop->setDisabled(true);
@@ -795,13 +795,13 @@ WaterPoloCtrl::onTimeUpdate() {
             tempoTimer.invalidate();
             if(isAlarmFound) {
 #ifndef Q_OS_ANDROID
-#ifdef __ARM_ARCH
                 // Switch On the Alarm
+#ifdef __ARM_ARCH
                 gpiod_line_set_value(pLineAlarm, 1);
 #else
                 serialPort.write(QByteArray().append(BELL));
-                alarmDurationTimer.start(alarmDuration);
 #endif
+                alarmDurationTimer.start(alarmDuration);
 #endif
             }
             enableUi();
@@ -1288,11 +1288,13 @@ WaterPoloCtrl::processBtMessage(QString sMessage) {
 void
 WaterPoloCtrl::onStopAlarm() {
 #ifndef Q_OS_ANDROID
+    if(isAlarmFound) {
+        // Switch Off the Alarm
 #ifdef __ARM_ARCH
-    // Switch Off the Alarm
-    gpiod_line_set_value(pLineAlarm, 0);
+        gpiod_line_set_value(pLineAlarm, 0);
 #else
-    serialPort.write(QByteArray().append(CANCEL));
+        serialPort.write(QByteArray().append(CANCEL));
 #endif
+    }
 #endif
 }
