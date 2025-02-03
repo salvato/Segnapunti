@@ -52,7 +52,7 @@ WaterPoloCtrl::WaterPoloCtrl(QFile *myLogFile, QWidget *parent)
     , runMilliSeconds(0)
     , lastM(-1)
     , lastS(-1)
-    , alarmIO(24)
+    , alarmIO(24) // GPIO24 pin 18 of the 40 pins connector. See: https://pinout.xyz/
     , alarmDuration(3000)
 {
     setWindowTitle("Waterpolo Controller - © Gabriele Salvato (2025)");
@@ -98,7 +98,7 @@ WaterPoloCtrl::WaterPoloCtrl(QFile *myLogFile, QWidget *parent)
     gpiod_line_request_output(pLineAlarm, "alarm", 0);
     // Switch Off the Alarm
     gpiod_line_set_value(pLineAlarm, 0);
-    isAlarmFound = true;
+    isAlarmFound = (pChip != NULL) && (pLineAlarm != NULL);
 #else
     // Alarm connected on Serial Port
     baudRate = QSerialPort::Baud115200;
@@ -136,6 +136,9 @@ WaterPoloCtrl::closeEvent(QCloseEvent *event) {
         serialPort.close();
     }
 #else
+    // Restore line to input
+    gpiod_line_release(pLineAlarm);
+    gpiod_line_request_input(pLineAlarm, "alarm");
     // Release lines and chip
     gpiod_line_release(pLineAlarm);
     gpiod_chip_close(pChip);
